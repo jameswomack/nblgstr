@@ -1,0 +1,20 @@
+#!/usr/bin/env coffee
+
+[cs,file,target,source,home] =  process.argv
+
+class RoyBatty
+  request = require 'request'
+
+  constructor: (@target,@source,@home = "http://localhost:5984/_replicate") ->
+    @body = '{"target":"'+@target+'", "source":"'+@source+'"}'
+
+  replicate: ->
+    request
+      uri: @home
+      json: true
+      method: 'POST'
+      body: @body
+    , (error, response, body) ->
+      console.log body
+
+r = new RoyBatty(target,source).replicate()

@@ -1,0 +1,5 @@
+!= partial( "../_blocks/_nav" )
+block new
+  h1(data-bind="defaultModelName | prepend 'Create a '")
+  form(data-formfor-instance='instance', data-event-submit="create")
+    block properties

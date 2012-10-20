@@ -1,0 +1,76 @@
+nav
+  background #fff
+  padding 6px 0px 15px 0px
+  box-sizing border-box
+  height 48px
+  color #000
+
+  h1.title
+    color #000
+    position absolute
+    top -20px
+    -moz-animation: title 10s infinite cubic-bezier(0, 0, 0, -1)
+    -webkit-animation: title 10s infinite cubic-bezier(0, 0, 0, -1)
+    small
+      font-size 44%
+      left 348px
+      position absolute
+      top 18px
+
+  ul
+    list-style-type none
+    padding 0px
+    position absolute
+    left 406px
+    top 8px
+    background transparent
+    text-align left
+    li
+      display inline-block
+      margin-left 6px
+      position relative
+    li:before
+      content "|"
+
+  a
+    color blue
+    text-transform uppercase
+    text-decoration none
+    font-weight bold
+    letter-spacing 3px
+
+  a:visited
+    color crimson
+    text-decoration underline
+
+  a:hover
+    color: goldenrod
+    text-decoration underline
+
+  #keybindings
+    position absolute
+    right 10px
+    top 8px
+    *
+      vertical-align middle
+    span
+      margin-left 12px
+    img
+      margin-left 42px
+
+
+@-moz-keyframes title {
+  0%   { -moz-transform: translateY(0px); -moz-animation-timing-function: ease-in;}
+  25%  { -moz-transform: translateY(2px); }
+  50%  { -moz-transform: translateY(5px); -moz-animation-timing-function: ease-in; }
+  75%  { -moz-transform: translateY(2px); }
+  100% { -moz-transform: translateY(0px); }
+}
+
+@-webkit-keyframes title {
+  0%   { -webkit-transform: translateY(0px); -webkit-animation-timing-function: ease-in;}
+  25%  { -webkit-transform: translateY(2px); }
+  50%  { -webkit-transform: translateY(5px); -webkit-animation-timing-function: ease-in; }
+  75%  { -webkit-transform: translateY(2px); }
+  100% { -webkit-transform: translateY(0px); }
+}

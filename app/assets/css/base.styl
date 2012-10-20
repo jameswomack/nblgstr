@@ -1,0 +1,143 @@
+@import "vendor/normalize.css"
+
+@import "nib"
+
+no_list_styling()
+  list-style none
+  display block
+  margin 0
+  padding 0
+
+text_drop_shadow()
+  text-shadow 1px 1px 2px rgba(0, 0, 0, 0.8)
+
+// Can be replaced by https://github.com/visionmedia/nib/pull/107
+replace-text(image, x=50%, y=50%)
+  hide-text()
+  background-image image
+  background-repeat no-repeat
+  background-position x y
+
+teaching_subjects = ( daily_routine reading_comprehension grammar composition spelling language_arts history science mathematics vocabulary social_studies memory_work )
+teaching_subject_hues = ( #ed1c24 #00aeef #ffdc00 #939598 #00a88e #0066b3 #f7941e #9f3f97 #ed1c24 #ec008c #0066b3 #0066b3 )
+subject-coloring-on(prop)
+  for subj,i in teaching_subjects
+    &.{subj}, .{subj} &
+      {prop} teaching_subject_hues[i]
+
+base_font_size = 14px
+base_font_family = "BaseTwelveMedium", monospace
+base_font_color = #fff
+
+body
+  background-color: #000
+  font: base_font_size base_font_family
+  font-style: none
+  color: base_font_color
+  text-align: center
+  font-size: 130%
+
+a
+  color lightblue
+
+a:visited
+  color pink
+
+ul
+  list-style-type: none
+  margin: 0px auto 36px auto
+  width: 600px
+  background #ddd
+  padding: 12px 18px 18px 18px
+  border-top-left-radius 12px
+  border-bottom-right-radius 12px
+
+li.index
+  margin-top 12px
+  background #333
+  border-top-right-radius 12px
+  border-bottom-left-radius 12px
+  padding 12px
+  box-sizing border-box
+  text-shadow #000 0px 1px 1px
+  span, input[type=checkbox]
+    vertical-align middle
+  span span, span input[type=checkbox]
+    vertical-align middle
+    line-height 90%
+    margin-top 6%
+  input[type=checkbox]
+    margin-left 10px
+
+ul#use
+  margin-top 72px
+
+li
+  -webkit-transition: background-color .2s linear
+
+ul#use li
+  background crimson
+  color #fff
+  font-weight bold
+  text-transform uppercase
+
+li.index:hover
+  background #000
+  color #ccc
+
+li.new span.title, li.index span.send
+  color pink
+  text-decoration underline
+
+li.index a:hover, li.new span.title:hover, li.index span.send:hover
+  color crimson
+
+div.inputContainer
+  label, input, textarea
+    vertical-align middle
+  input[type=text]
+    height 36px
+  textarea
+    height 80px
+  input[type=text], textarea
+    text-align center
+    border-radius 12px
+    width 528px
+    margin-left 12px
+    box-sizing border-box
+  label
+    display inline-block
+    width 72px
+
+input[name=knowHow]
+  width: 520px
+
+h1
+  text-transform uppercase
+  letter-spacing 3px
+
+iframe
+  width 50%
+  display inline-block
+  box-sizing border-box
+  background #fff
+  height 600px
+
+select, input[type=checkbox]
+  margin-left: 10px
+  margin-top: 10px
+
+div.errors
+  position absolute
+  background crimson
+  width 100%
+  top 128px
+  text-shadow #000 0px 1px 1px
+
+div#processing
+  background #000
+  padding 12px
+  border-top-left-radius 12px
+  border-bottom-right-radius 12px
+  margin-top 12px
+

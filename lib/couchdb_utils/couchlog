@@ -1,0 +1,12 @@
+#!/usr/bin/env coffee
+
+request = require 'request'
+
+[cs,file,db_name] =  process.argv
+
+request.get "http://localhost:5984/#{db_name}/_all_docs", (e,r,b) ->
+  b = JSON.parse b
+  ids = []
+  for row in b.rows
+    ids.push row.id
+   console.log ids

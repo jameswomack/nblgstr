@@ -1,0 +1,59 @@
+ul#instances
+  li
+    padding-top: 24px
+    padding-bottom: 24px
+    a
+      margin-left: 12px
+      width: 120px
+    span, a
+      display: inline-block
+    span.title, span.title a
+      width: 320px
+      text-align: left
+      text-transform uppercase
+    span.title a
+      text-align center
+    span.ordinal
+      margin-right: 8px
+
+button.camera, div.camera
+  height: 50px
+  width: 60px
+  border-radius: 2px
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.5)
+  font-family: base_font_family
+  float: left
+  margin-top: -10px
+  margin-left: 100px
+  background: url(/img/camera.png) no-repeat 12px 8px, linear-gradient(top, #fff, #f2f2f2)
+  border-color: #e1e1e1
+
+p#project
+  margin-bottom -40px
+  font-style italic
+  color #ccc
+
+div#container
+  height 600px
+  overflow hidden
+  position relative
+
+div#ulContainer
+  height 600px
+  overflow scroll
+  position relative
+
+div#ulContainerMask, div#ulContainerMaskTop
+  position absolute
+  width 100%
+  z-index 100
+
+div#ulContainerMask
+  background: linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,1))
+  top 460px
+  height 140px
+
+div#ulContainerMaskTop
+  background: linear-gradient(bottom, rgba(0,0,0,0), rgba(0,0,0,1))
+  top 0px
+  height 20px

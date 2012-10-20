@@ -1,0 +1,15 @@
+!= partial( "../_blocks/_nav" )
+h1
+ input( type="text", name="knowHow", placeholder="Search project by name", data-event-keyup="filter" )
+ input( type="button", value="reset", data-event-click="resetSearch"  )
+p#matchStats
+ul
+ li( class="index new" )
+   span( class="title", data-event-click="goToNew" ) Fill-out New Instance
+div#container
+  div#ulContainerMask
+  div#ulContainerMaskTop
+  div#ulContainer
+    ul#instances
+      li( data-foreach-instance="list", class="index" )
+        block list-item

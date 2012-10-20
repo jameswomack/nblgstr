@@ -1,0 +1,5 @@
+block edit
+  h1(data-bind="defaultModelName | prepend 'Edit a '")
+  form(data-formfor-instance='instance', data-event-submit="update")
+    h2 = params
+    block properties
