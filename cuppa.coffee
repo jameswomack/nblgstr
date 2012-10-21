@@ -9,8 +9,8 @@ __uploads = "#{__public}/uploads"
 
 require "./config"
 require "./db"
-require "./lib/console"
-Mack = require('./lib/mack')
+require "#{__lib}/console"
+Mack = require("#{__lib}/mack")
 
 express = require "express"
 assets = require "connect-assets"
@@ -19,7 +19,7 @@ sugar = require "sugar"
 NG.app = app = express.createServer()
 
 request = require 'request'
-routes = require './lib/routes'
+routes = require "#{__lib}/routes"
 fs = require "fs"
 
 asset_helper = {}
@@ -36,7 +36,7 @@ app.configure ->
   app.use express.static __public
   app.use express.bodyParser keepExtensions: true, uploadDir: __uploads
 
-  app.set 'views', "#{__app}/views"
+  app.set 'views', "#{__assets}/views"
   app.set 'view engine', 'jade'
 
 routes.setupPsuedoProxy app, 'api', NG

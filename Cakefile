@@ -31,20 +31,3 @@ task "db:delete_projects", ->
       doc._deleted = true
     db.save docs, (err) ->
       console.log err if err
-
-seed = (what) ->
-  db.reset (err) ->
-    if err
-      console.log "Failed resetting db", err
-      return
-
-    db.migrate (err) ->
-      if err
-        console.log "Failed db migration", err
-        return
-
-      for type, data of require "#{NG.root}/db/#{what}"
-        for d in data
-          d.t = Batman.helpers.singularize type
-        db.save data, (err) ->
-          console.log err if err
