@@ -30,7 +30,7 @@ proxyMeee = (url, req, res) ->
 
 module.exports = class Routes
 
-  @setupPsuedoProxy = (app, namespace, AppNamespace, isRoot) ->
+  @setupPseudoProxy = (app, namespace, AppNamespace, isRoot) ->
     NG ?= AppNamespace
 
     app.get /^\/img\/(att\/)?([^/]+)\/([^.]+)/, (req, res) ->

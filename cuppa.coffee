@@ -1,26 +1,24 @@
-require './app/index'
-NG = global.NG
+global.NG = NG ?= {}
 
-__app     = "#{NG.root}/app"
+path    = require 'path'
+express = require 'express'
+assets  = require 'connect-assets'
+sugar   = require 'sugar'
+request = require 'request'
+fs      = require 'fs'
+
+NG.root = path.normalize "#{__dirname}/.."
+NG.app  = app = express.createServer()
+NG.env  = process.env["NODE_ENV"] || "development"
+
 __lib     = "#{NG.root}/lib"
 __public  = "#{NG.root}/public"
-__assets  = "#{__app}/assets"
+__assets  = "#{NG.root}/assets"
 __uploads = "#{__public}/uploads"
 
 require "./config"
 require "./db"
 require "#{__lib}/console"
-Mack = require("#{__lib}/mack")
-
-express = require "express"
-assets = require "connect-assets"
-sugar = require "sugar"
-
-NG.app = app = express.createServer()
-
-request = require 'request'
-routes = require "#{__lib}/routes"
-fs = require "fs"
 
 asset_helper = {}
 app.configure ->
@@ -39,12 +37,17 @@ app.configure ->
   app.set 'views', "#{__assets}/views"
   app.set 'view engine', 'jade'
 
-routes.setupPsuedoProxy app, 'api', NG
+Routes = require "#{__lib}/routes"
+Routes.setupPseudoProxy app, 'api', NG
 
+Mack = require("#{__lib}/mack")
 mack = new Mack
 @MACaddress = ''
 mack.on 'addressFound', (a) =>
   @MACaddress = a
+
+app.get '/views/:controller/:action.html', (req, res) ->
+  res.render "#{req.params.controller}/#{req.params.action}", layout: false
 
 app.get '/uuidURL', (req, res) =>
   opts = method: req.method, url: "#{NG.config.db.base_url}/_uuids"
@@ -58,9 +61,6 @@ app.get '/uuidURL', (req, res) =>
 app.get /^\/img\/([^/]+)\/([^.]+)/, (req, res) ->
   [ id, path ] = req.params[0..1]
   request("#{NG.config.db.url}/#{id}/#{path}").pipe res
-
-app.get '/views/:controller/:action.html', (req, res) ->
-  res.render "#{req.params.controller}/#{req.params.action}", layout: false
 
 app.post '/upload', (req, res) ->
   if req.files.picture isnt undefined
