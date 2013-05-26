@@ -1,34 +1,30 @@
-global ?= window
-NG = global.NG
-NG.config ?= {}
-NG.env ?= "development"
+authority = require '../lib/couchdb_utils/authority'
 
-NG._cs = _cs = ( c, s ) -> if window? then c else s
+global.Frei = {} if typeof global.Frei is 'undefined'
+Frei = global.Frei
+Frei.config = {} if typeof Frei.config is 'undefined'
+Frei.env = "development" if typeof Frei.env is 'undefined'
 
-NG.config.http ?= {}
-NG.config.http.port = process?.env.PORT || location?.port || 3000
-NG.config.http.port = parseInt NG.config.http.port
+Frei.config.http = {} if typeof Frei.config.http is 'undefined'
+Frei.config.http.port = process?.env.PORT || location?.port || 3000
+Frei.config.http.port = parseInt Frei.config.http.port
 
 data =
   base:
     proto: 'http'
     hostname: 'localhost'
-    port: _cs NG.config.http.port, 5984
+    port: 5984
     view_id: 'app'
     url_auth_string: ''
   test:
-    name: _cs "api/test", "test"
+    name: "test"
   development:
-    name: _cs "api/ng", "ng"
+    name: "frei"
 
-if process?
-  env = process.env
-  if env.COUCH_USERNAME and env.COUCH_PASSWORD
-    u = data.base.username = env.COUCH_USERNAME
-    p = data.base.password = env.COUCH_PASSWORD
-    data.base.url_auth_string = "#{u}:#{p}@"
+data.base.url_auth_string = authority.assign(data.base)
 
-NG.config.db = config = data[NG.env]
-config[k] = v for k, v of data.base
-NG.config.db.base_url = base_url = "#{config.proto}://#{config.url_auth_string}#{config.hostname}:#{config.port}"
-NG.config.db.url = "#{base_url}/#{config.name}"
+Frei.config.db = data[Frei.env]
+Frei.config.db[k] = v for k, v of data.base
+config = Frei.config.db
+Frei.config.db.base_url = base_url = "#{config.proto}://#{config.url_auth_string}#{config.hostname}:#{config.port}"
+Frei.config.db.url = "#{base_url}/#{config.name}"

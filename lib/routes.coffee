@@ -1,6 +1,6 @@
 Q = require 'q'
 request = require "request"
-NG = global.NG
+Frei = global.Frei
 
 require './mime'
 MimeTypes = global.MimeTypes
@@ -12,7 +12,7 @@ basic_auth = (user, pass) ->
   "Basic #{credentials.toString 'base64'}"
 
 request.get
-  url: "#{NG.config.db.base_url}/validation/teacher"
+  url: "#{Frei.config.db.base_url}/validation/teacher"
   headers:
     "content-type": "application/json"
     "accept": "application/json"
@@ -20,36 +20,42 @@ request.get
   , (err, res) ->
     body = JSON.parse res.body
     return if body.error is "unauthorized"
-    NG.config.db_credentials = basic_auth "teacher", body.key
+    Frei.config.db_credentials = basic_auth "teacher", body.key
 
 proxyMeee = (url, req, res) ->
   opts = { method: req.method, url : url }
   opts.headers ?= {}
-  opts.headers.Authorization = NG.config.db_credentials if NG.config.db_credentials?
+  opts.headers.Authorization = Frei.config.db_credentials if Frei.config.db_credentials?
   request(opts).pipe res
 
 module.exports = class Routes
-
   @setupPseudoProxy = (app, namespace, AppNamespace, isRoot) ->
-    NG ?= AppNamespace
+    Frei ?= AppNamespace
 
-    app.get /^\/img\/(att\/)?([^/]+)\/([^.]+)/, (req, res) ->
-      [ root, id, path ] = req.params[0..2]
-      proxyMeee "#{NG.config.db.url}/#{id}/#{path}", req, res
-
-    app.get /^\/(views\/)?att\/([^/]+)\/([^.]+)/, (req, res) ->
-      [ root, id, att_path ] = req.params[0..2]
-      proxyMeee "#{NG.config.db.url}/#{id}/#{att_path}", req, res
-
-    # Proxy requests to CouchDB as it's on a different port
-    app.all "/#{namespace}/*", (req, res) =>
-      _url = if isRoot then NG.config.db.base_url else NG.config.db.url
-      _r = if isRoot then "" else "/#{NG.config.db.name}"
+    @initial_opts = (req, res) ->
+      _url = if isRoot then Frei.config.db.base_url else Frei.config.db.url
+      _r = if isRoot then "" else "/#{Frei.config.db.name}"
       url = "#{_url}#{req.originalUrl.replace "/#{namespace}#{_r}", ""}"
       opts = { method: req.method, url : url }
       opts.headers ?= {}
-      opts.headers.Authorization = NG.config.db_credentials if NG.config.db_credentials?
+      opts.headers.Authorization = Frei.config.db_credentials if Frei.config.db_credentials?
       opts.json = req.body if Object.keys(req.body).length
+      opts
+
+    app.get /^\/img\/(att\/)?([^/]+)\/([^.]+)/, (req, res) ->
+      [ root, id, path ] = req.params[0..2]
+      proxyMeee "#{Frei.config.db.url}/#{id}/#{path}", req, res
+
+    app.get /^\/(views\/)?att\/([^/]+)\/([^.]+)/, (req, res) ->
+      [ root, id, att_path ] = req.params[0..2]
+      proxyMeee "#{Frei.config.db.url}/#{id}/#{att_path}", req, res
+
+    # Proxy requests to CouchDB as it's on a different port
+    app.all "/#{namespace}", (req, res) =>
+      @proxyToCouch req, res, @initial_opts(req, res)
+
+    app.all "/#{namespace}/*", (req, res) =>
+      opts = @initial_opts(req, res)
 
       # TODO: Have .then() resolved regardless of any promises
       imagePromises = @create_images opts.json
@@ -57,7 +63,7 @@ module.exports = class Routes
         # promise is really an array of all all promised results
         Q.all(imagePromises).then((promise) =>
           @proxyToCouch req, res, Object.merge(opts, promise[0])
-        ).end()
+        ).done()
       else
         @proxyToCouch req, res, opts
 
@@ -109,7 +115,7 @@ module.exports = class Routes
     # TODO: Return to sane Q.defer() after ICS is removed
     deferred = Q['defer']()
     im.resize imageData, (err, stdout, stderr) ->
-      throw new NG.DevelopmentError err if err
+      throw new Frei.DevelopmentError err if err
 
       result = cb.call(this, stdout)
       deferred.resolve result

@@ -1,7 +1,7 @@
 require "./db"
 
-NG = global.NG
-db = NG.db
+Frei = global.Frei
+db = Frei.db
 
 fs = require "fs"
 path = require "path"

@@ -1,14 +1,17 @@
 require '../cuppa'
 
 cradle = require "cradle"
-NG = global.NG
 
-require "#{NG.root}/config"
-config = NG.config.db
+require "#{global.Frei.root}/config"
+config = global.Frei.config.db
 
-couch = new(cradle.Connection)(config.hostname, config.port, cache: false)
+connection_params = [ config.hostname, config.port, cache: false ]
+if config.username and config.password
+  connection_params.push { auth: { username: config.username, password: config.password } }
 
-NG.db = db = couch.database(config.name)
+global.Frei.couch = new(cradle.Connection)(connection_params...)
+
+global.Frei.db = db = global.Frei.couch.database(config.name)
 
 db.migrate = (cb) ->
   design = require "./design"

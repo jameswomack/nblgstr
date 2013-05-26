@@ -1,4 +1,4 @@
-class NG.Controller extends Batman.Controller
+class Frei.Controller extends Batman.Controller
 
   @accessor 'routingKey', -> Batman.functionName( @constructor).replace /Controller$/, ''
 
@@ -17,8 +17,8 @@ class NG.Controller extends Batman.Controller
       s = []
       if env.rows
         for r in env.rows
-          env.subject = NG[ Batman.helpers.classify(r.doc.t) ]
-          h = NG.CouchStorage::getRecordFromData r.doc, env.subject
+          env.subject = Frei[ Batman.helpers.classify(r.doc.t) ]
+          h = Frei.CouchStorage::getRecordFromData r.doc, env.subject
           h.set '_key', r.key
           s.push h
       if s.length
@@ -26,7 +26,7 @@ class NG.Controller extends Batman.Controller
         @set "searchResults", s.sort (a,b) -> if a.get("name") >= b.get("name") then 1 else -1 if s
       else
         @resetSearch node, true
-    NG.CouchStorage.couchView "#{@get 'defaultModelNameSingular'}_search", {startkey:'"'+$(node).val()+'"', endkey:'"'+$(node).val()+'zzzzz"'}, cb
+    Frei.CouchStorage.couchView "#{@get 'defaultModelNameSingular'}_search", {startkey:'"'+$(node).val()+'"', endkey:'"'+$(node).val()+'zzzzz"'}, cb
 
   resetSearch : (node, keepText) ->
     @set 'searching', no
@@ -36,11 +36,11 @@ class NG.Controller extends Batman.Controller
 
   constructor : ->
     k = Batman.helpers.singularize(@constructor.toString().split('function ')[1].split('() {')[0].split('Controller')[0])
-    @DefaultModel = NG[k]
+    @DefaultModel = Frei[k]
     @set 'defaultModelName', k
     @set 'defaultModelNameSingular', k.toLowerCase()
     @set 'defaultModelNamePlural', Batman.helpers.pluralize( k ).toLowerCase()
-    @set 'NG', NG
+    @set 'Frei', Frei
     super arguments...
 
   goToNew : ->
@@ -48,8 +48,8 @@ class NG.Controller extends Batman.Controller
 
   new : ->
     @set "instance", new @DefaultModel
-    @set 'cameraView', new NG.CameraView instance: @get('instance')
-    NG.on 'ready', =>
+    @set 'cameraView', new Frei.CameraView instance: @get('instance')
+    Frei.on 'ready', =>
         $('form').removeAttr('data-formfor-instance').attr('data-formfor-'+@get('defaultModelNameSingular'),'instance')
 
   index : ->
@@ -63,11 +63,12 @@ class NG.Controller extends Batman.Controller
     @DefaultModel.find params.id, (e, instance) =>
       console.error e if e
       @set "instance", instance if instance
-      @set 'cameraView', new NG.CameraView instance: instance
-    NG.on 'ready', =>
+      @set 'cameraView', new Frei.CameraView instance: instance
+    Frei.on 'ready', =>
       $('form').removeAttr('data-formfor-instance').attr('data-formfor-'+@get('defaultModelNameSingular'),'instance')
 
   createOrUpdate : ->
+    console.log arguments...
     @get('instance').save (err) =>
       if err
         console.error err
@@ -85,3 +86,19 @@ class NG.Controller extends Batman.Controller
     @DefaultModel.find params.id, (e, modelInstance) =>
       console.error e if e
       @set 'instance', modelInstance if modelInstance
+
+  placeholderConformantMatcher: 'input[type=text], textarea'
+
+  autofillNode : (n) ->
+    placeholder_conformant_n = $(n).find(@placeholderConformantMatcher)[0]
+    placeholder_conformant = $(placeholder_conformant_n)
+    placeholder = placeholder_conformant.attr('placeholder')
+    data_bind_key = placeholder_conformant.attr('data-bind').split('.')[1]
+    @set "instance.#{data_bind_key}", placeholder
+
+  autofill : (n, e) ->
+    @autofillNode n
+
+  autofillAll : (n, e) ->
+    $(n).parent().find('label').each (idx, n) =>
+      @autofillNode n

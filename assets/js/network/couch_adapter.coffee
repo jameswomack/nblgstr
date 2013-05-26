@@ -1,10 +1,10 @@
-class NG.CouchStorage extends Batman.RestStorage
+class Frei.CouchStorage extends Batman.RestStorage
   serializeAsForm: false
 
-  _defaultCollectionUrl: (_) -> NG.config.db.name
+  _defaultCollectionUrl: (_) -> Frei.config.db.name
   urlForCollection: (model, env) ->
     view = env.options.data.view
-    view_id = env.options.data.view_id ? NG.config.db.view_id
+    view_id = env.options.data.view_id ? Frei.config.db.view_id
     env.options.data.key = JSON.stringify env.options.data.key if env.options.data.key
     if (not view?) and (modelType = Batman.helpers.singularize(@storageKey(model.prototype)))
       view = "type"

@@ -1,4 +1,4 @@
-class NG.CameraView extends Batman.View
+class Frei.CameraView extends Batman.View
   constructor: ->
     super arguments...
     @input = $('<input type="file">')

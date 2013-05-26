@@ -1,6 +1,8 @@
-class @NG extends Batman.App
+class @Frei extends Batman.App
   @root 'projects#index'
 
+  @resources 'stores'
+  @resources 'photos'
   @resources 'projects'
 
   @route 'error', "error#index"
@@ -11,4 +13,4 @@ class @NG extends Batman.App
     Object.keys(@get('routes')).exclude("_batman","routeMap","args")
 
 $ ->
-  NG.run()
+  Frei.run()

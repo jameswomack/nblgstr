@@ -4,7 +4,7 @@
     "express": "~2.5"
     , "stylus": "~0.27"
     , "nib": "~0.4"
-    , "coffee-script": "~1.2.0s"
+    , "coffee-script": "~1.6.x"
     , "sugar": "~1.2"
     , "connect-assets": "2.2"
     , "request": "2.x"
@@ -19,6 +19,10 @@
     "appName": "nblgstr"
     , "build": true
     , "buildDir": "./build"
+  },
+  "private": true,
+  "scripts": {
+    "start": "node_modules/.bin/supervisor -x ./node_modules/.bin/coffee -i install -e js,coffee,jade,styl,css --no-restart-on exit cuppa.coffee",
+    "test": "./node_modules/.bin/coffee ./tests/test.coffee"
   }
-, "private": "true"
 }

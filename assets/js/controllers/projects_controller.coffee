@@ -1,1 +1,1 @@
-class NG.ProjectsController extends NG.Controller
+class Frei.ProjectsController extends Frei.Controller

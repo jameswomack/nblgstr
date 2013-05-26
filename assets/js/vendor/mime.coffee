@@ -1,1 +1,1 @@
-/Users/ideas/Cirrostratus/src/nblgstr/lib/mime.coffee
+../../../lib/mime.coffee

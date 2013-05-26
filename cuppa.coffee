@@ -1,4 +1,5 @@
-global.NG = NG ?= {}
+global.Frei = {} if typeof global.Frei is 'undefined'
+Frei = global.Frei
 
 path    = require 'path'
 express = require 'express'
@@ -7,18 +8,18 @@ sugar   = require 'sugar'
 request = require 'request'
 fs      = require 'fs'
 
-NG.root = path.normalize "#{__dirname}/.."
-NG.app  = app = express.createServer()
-NG.env  = process.env["NODE_ENV"] || "development"
+Frei.root = path.normalize "#{__dirname}"
+Frei.app  = app = express.createServer()
+Frei.env  = process.env["NODE_ENV"] || "development"
 
-__lib     = "#{NG.root}/lib"
-__public  = "#{NG.root}/public"
-__assets  = "#{NG.root}/assets"
+__lib     = "#{Frei.root}/lib"
+__public  = "#{Frei.root}/public"
+__assets  = "#{Frei.root}/assets"
 __uploads = "#{__public}/uploads"
 
 require "./config"
 require "./db"
-require "#{__lib}/console"
+require "#{__lib}/terminal/console"
 
 asset_helper = {}
 app.configure ->
@@ -38,7 +39,7 @@ app.configure ->
   app.set 'view engine', 'jade'
 
 Routes = require "#{__lib}/routes"
-Routes.setupPseudoProxy app, 'api', NG
+Routes.setupPseudoProxy app, 'api', Frei
 
 Mack = require("#{__lib}/mack")
 mack = new Mack
@@ -50,9 +51,9 @@ app.get '/views/:controller/:action.html', (req, res) ->
   res.render "#{req.params.controller}/#{req.params.action}", layout: false
 
 app.get '/uuidURL', (req, res) =>
-  opts = method: req.method, url: "#{NG.config.db.base_url}/_uuids"
+  opts = method: req.method, url: "#{Frei.config.db.base_url}/_uuids"
   opts.headers ?= {}
-  db_creds = NG.config.db_credentials
+  db_creds = Frei.config.db_credentials
   opts.headers.Authorization = db_creds if db_creds?
   res.contentType opts.headers["content-type"] = opts.headers["accept"] = "application/json"
   request.get opts, (e, r, body) =>
@@ -60,7 +61,7 @@ app.get '/uuidURL', (req, res) =>
 
 app.get /^\/img\/([^/]+)\/([^.]+)/, (req, res) ->
   [ id, path ] = req.params[0..1]
-  request("#{NG.config.db.url}/#{id}/#{path}").pipe res
+  request("#{Frei.config.db.url}/#{id}/#{path}").pipe res
 
 app.post '/upload', (req, res) ->
   if req.files.picture isnt undefined
@@ -74,13 +75,14 @@ app.post '/upload', (req, res) ->
 app.get '/*', (req, res) ->
   res.render "index",
     layout: false
-    node_env: NG.env
+    node_env: Frei.env
     stylesheet: asset_helper.css("screen")
     scripts: asset_helper.js("app")
     title: "Mobile & Web Software Development | Noble Gesture"
     status: 200
 
 if module.parent
-  module.exports = NG
+  module.exports = Frei
 else
-  app.listen NG.config.http.port
+  app.listen Frei.config.http.port
+  console.log "Frei is listening on #{Frei.config.http.port}"

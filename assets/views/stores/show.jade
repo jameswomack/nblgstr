@@ -1,0 +1,36 @@
+extends ../_blocks/_show
+block properties
+  div
+    label
+      span Title
+      span.modelValue(type='text', data-bind='instance.title')
+  div
+    label
+      span Description
+      span.modelValue(data-bind='instance.description')
+  div
+    label
+      span Website
+      span.modelValue(data-bind='instance.website', type="text")
+  div
+    label
+      span Phone
+      span.modelValue(data-bind='instance.phone', type="text")
+  div
+    label
+      span Street
+      span.modelValue(data-bind='instance.street', type="text")
+  div
+    label
+      span City
+      span.modelValue(data-bind='instance.city', type="text")
+  div
+    label
+      span State
+      span.modelValue(data-bind='instance.state', type="text")
+  div
+    label
+      span Zip
+      span.modelValue(data-bind='instance.zip', type="text")
+  div.project_picture
+    img(data-bind-src="cameraView.instance.picture", data-showif="cameraView.instance.picture")

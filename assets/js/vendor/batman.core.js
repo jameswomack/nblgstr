@@ -1,1 +1,1 @@
-../../../../node_modules/batman/lib/batman.js
+../../../node_modules/batman/lib/batman.js

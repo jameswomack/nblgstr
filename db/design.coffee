@@ -1,14 +1,11 @@
 require './index'
 
-module.exports = {
-  _id: "_design/#{NG.config.db.view_id}"
+design = {
+  _id: "_design/#{Frei.config.db.view_id}"
   , views:
     type:
       map: (doc) ->
         emit doc.t, null if (doc.t)
-    project_search:
-      map: (d) ->
-        emit d.name, d._id if d.t is 'project'
     parents:
       map: (d) ->
         for k, v of d
@@ -30,3 +27,14 @@ module.exports = {
   , lists: {}
   , shows: {}
 }
+
+design.views.project_search = {
+  map: (d) ->
+    emit d.title, d._id if d.t is 'project'
+}
+
+design.views.store_search = {
+  map: (d) ->
+    emit d.title, d._id if d.t is 'store'
+}
+module.exports = design

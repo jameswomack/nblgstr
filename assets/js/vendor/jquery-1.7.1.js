@@ -7551,7 +7551,7 @@ jQuery.extend({
 
 		}
 
-		// NG callbacks on deferreds
+		// Frei callbacks on deferreds
 		for ( i in { success: 1, error: 1, complete: 1 } ) {
 			jqXHR[ i ]( s[ i ] );
 		}
@@ -7874,7 +7874,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 		s.url = url;
 		s.data = data;
 
-		// NG callback
+		// Frei callback
 		window[ jsonpCallback ] = function( response ) {
 			responseContainer = [ response ];
 		};
@@ -7908,7 +7908,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 
 
 
-// NG script dataType
+// Frei script dataType
 jQuery.ajaxSetup({
 	accepts: {
 		script: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript"

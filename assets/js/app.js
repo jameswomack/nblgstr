@@ -7,7 +7,7 @@
 
 //= require vendor/mime
 
-//= require ng
+//= require frei
 
 //= require config
 //= require_tree network

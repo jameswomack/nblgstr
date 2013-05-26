@@ -1,2 +1,2 @@
-class NG.ErrorController extends NG.Controller
+class Frei.ErrorController extends Frei.Controller
   index: ->

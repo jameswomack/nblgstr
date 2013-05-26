@@ -1,5 +1,5 @@
-class NG.Model extends Batman.Model
-  @persist NG.CouchStorage
+class Frei.Model extends Batman.Model
+  @persist Frei.CouchStorage
   @primaryKey: "_id"
   @encode "_rev",'_attachments','creation_state'
 
@@ -126,16 +126,16 @@ class NG.Model extends Batman.Model
         resourceName = Batman.helpers.pluralize resourceName unless v?.get?(resourceName)?
         if singular
           if Batman.typeOf(v) is 'Set'
-            throw new NG.DevelopmentError "Singular relations require a Batman.Object, Batman.Set given."
+            throw new Frei.DevelopmentError "Singular relations require a Batman.Object, Batman.Set given."
           else if v.get?(singularResourceName) and v.get?(singularResourceName).length > 0
-            throw new NG.DevelopmentError "Parent model should not have more than 1 children associated."
+            throw new Frei.DevelopmentError "Parent model should not have more than 1 children associated."
           parent_data = if (Batman.typeOf(v) == 'String') then {_id: v} else {_id: v.get('id')}
         else
           parent_data = v
         v.get(resourceName).add @ if v.get?(resourceName)
         @set field_name, parent_data
       get: (k) ->
-        parentObj = NG[ Batman.helpers.classify(objectType) ]
+        parentObj = Frei[ Batman.helpers.classify(objectType) ]
         if singular
           return null unless @get(field_name)?
           parentObj.find @get(field_name)._id, (err, result) -> result
@@ -161,16 +161,16 @@ class NG.Model extends Batman.Model
 
     @accessor relation,
       set : (k, v)->
-        throw new NG.DevelopmentError "need to save first" if !@get('id')
+        throw new Frei.DevelopmentError "need to save first" if !@get('id')
         if singular
           related = @get(relation)
           related.on 'change', (r)->
-            throw new NG.DevelopmentError "Model should not have more than 1 children associated." if r and r.length > 0
+            throw new Frei.DevelopmentError "Model should not have more than 1 children associated." if r and r.length > 0
             v.set resourceName, @
             v.save()
       get : ->
-        throw new NG.DevelopmentError "need to save first" if !@get('id')
-        NG[ Batman.helpers.classify(objectType) ].all view: 'children', key: [ objectType, @get('id') ],  (err, results) ->
+        throw new Frei.DevelopmentError "need to save first" if !@get('id')
+        Frei[ Batman.helpers.classify(objectType) ].all view: 'children', key: [ objectType, @get('id') ],  (err, results) ->
           results
       unset : ->
         @unset field_name

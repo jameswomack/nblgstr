@@ -1,0 +1,41 @@
+extends ../_blocks/_new
+block properties
+  div
+    label(data-event-click="autofill")
+      span Title
+      input(type='text', data-bind='instance.title', placeholder="North Park Bikes")
+  div
+    label(data-event-click="autofill")
+      span Description
+      textarea(data-bind='instance.description', placeholder="We are awesome...")
+  div
+    label(data-event-click="autofill")
+      span Website
+      input(data-bind='instance.website', type="text", placeholder="http://google.com")
+  div
+    label(data-event-click="autofill")
+      span Phone
+      input(data-bind='instance.phone', type="text", placeholder="619.971.9801")
+  div
+    label(data-event-click="autofill")
+      span Street
+      input(data-bind='instance.street', type="text", placeholder="3818 Ray St. Apt 2")
+  div
+    label(data-event-click="autofill")
+      span City
+      input(data-bind='instance.city', type="text", placeholder="San Diego")
+  div
+    label(data-event-click="autofill")
+      span State
+      input(data-bind='instance.state', type="text", placeholder="Ca")
+  div
+    label(data-event-click="autofill")
+      span Zip
+      input(data-bind='instance.zip', type="text", placeholder="92104")
+  div(data-view="cameraView", class="camera_container")
+    != partial('../_blocks/_camera')
+  div.project_picture
+    img(data-bind-src="cameraView.instance.picture", data-showif="cameraView.instance.picture")
+    img(src="../../img/silhouette.png", data-hideif="cameraView.instance.picture")
+
+  input(value='Submit', type='submit')
