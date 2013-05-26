@@ -12,6 +12,6 @@ block properties
     img(data-bind-src="cameraView.instance.picture", data-showif="cameraView.instance.picture")
     img(src="../../img/silhouette.png", data-hideif="cameraView.instance.picture")
   div(data-view="cameraView")
-    != partial('../_blocks/_camera')
+    include ../_blocks/_camera
 
   input(value='Submit', type='submit')
