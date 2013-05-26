@@ -12,7 +12,10 @@ class Frei.CouchStorage extends Batman.RestStorage
     [ "#{window.location.protocol}//#{window.location.host}", @_defaultCollectionUrl(), '_design', view_id, '_view', view].join('/')
 
   @::before 'destroy', @skipIfError (env, next) ->
-    env.options.data.rev = env.subject.get "_rev"
+    subject = env.subject
+    data = subject.toJSON()
+    data.rev = subject.get "_rev"
+    env.options.data = data
     next()
 
   @::before 'readAll', @skipIfError (env, next) ->

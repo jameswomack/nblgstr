@@ -72,7 +72,7 @@ module.exports = class Routes
     # TODO - replace this with a `@::before 'delete'` on the client side in
     # the couch adapter, that's where it belongs.
     opts.qs = opts.json if req.method.toLowerCase() is 'delete'
-    opts.headers ?= {}
+    opts.headers = {} if typeof opts.headers is 'undefined'
     res.contentType opts.headers["content-type"] = opts.headers["accept"] = "application/json"
     request(opts).pipe res
 

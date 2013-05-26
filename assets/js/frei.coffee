@@ -2,8 +2,6 @@ class @Frei extends Batman.App
   @root 'projects#index'
 
   @resources 'stores'
-  @resources 'photos'
-  @resources 'projects'
 
   @route 'error', "error#index"
 

@@ -58,6 +58,16 @@ class Frei.Controller extends Batman.Controller
       console.error e if e
       @set "#{@get 'defaultModelNamePlural'}", list if list
 
+  index_destroy : (n) ->
+    node = $(n)
+    id = node.attr('title')
+    @DefaultModel.find id, (e, instance) =>
+      if e
+        console.error e
+      else
+        instance.destroy()
+        node.parent().hide('slow')
+
   edit : (params) ->
     @set "instance", new @DefaultModel
     @DefaultModel.find params.id, (e, instance) =>
