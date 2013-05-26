@@ -1,7 +1,7 @@
 class Frei.Model extends Batman.Model
   @persist Frei.CouchStorage
   @primaryKey: "_id"
-  @encode "_rev",'_attachments','creation_state'
+  @encode "_rev",'_attachments','created_time','updated_time'
 
   @classAccessor 'resourceName', -> @name
 

@@ -35,6 +35,7 @@ app.configure ->
   app.use express.static __public
   app.use express.bodyParser keepExtensions: true, uploadDir: __uploads
 
+  app.set 'view options', layout: false
   app.set 'views', "#{__assets}/views"
   app.set 'view engine', 'jade'
 
@@ -48,7 +49,7 @@ mack.on 'addressFound', (a) =>
   @MACaddress = a
 
 app.get '/views/:controller/:action.html', (req, res) ->
-  res.render "#{req.params.controller}/#{req.params.action}", layout: false
+  res.render "#{req.params.controller}/#{req.params.action}"
 
 app.get '/uuidURL', (req, res) =>
   opts = method: req.method, url: "#{Frei.config.db.base_url}/_uuids"

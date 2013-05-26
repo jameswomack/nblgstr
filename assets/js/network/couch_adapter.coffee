@@ -35,14 +35,20 @@ class Frei.CouchStorage extends Batman.RestStorage
 
     env.options.data = data
 
+    _data = JSON.parse data
+
     if env.subject.get('id')?
-      next()
+      _data.updated_time = new Date().toJSON()
+      @readyToSave env, _data, next
     else
       $.get '/uuidURL', (o) =>
-        _data = JSON.parse data
         _data._id = o.uuid
-        env.options.data = JSON.stringify(_data)
-        next()
+        _data.created_time = new Date().toJSON()
+        @readyToSave env, _data, next
+
+  readyToSave: (env, data, next) ->
+    env.options.data = JSON.stringify(data)
+    next()
 
   # TODO - update is only needed here because of https://github.com/Shopify/batman/pull/447
   @::after 'create', 'update', @skipIfError (env, next) ->
