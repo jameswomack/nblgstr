@@ -705,7 +705,7 @@ class MimeTypes
   @ext = (type) -> @exts[type]?[0]
   @type = (ext) -> @types[ext]
 
-MimeTypes.types ?= {}
+MimeTypes.types = {} if typeof MimeTypes.types is 'undefined'
 for type, exts of MimeTypes.exts
   MimeTypes.types[ext] = type for ext in exts
 

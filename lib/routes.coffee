@@ -24,20 +24,20 @@ request.get
 
 proxyMeee = (url, req, res) ->
   opts = { method: req.method, url : url }
-  opts.headers ?= {}
+  opts.headers = {} if typeof opts.headers is 'undefined'
   opts.headers.Authorization = Frei.config.db_credentials if Frei.config.db_credentials?
   request(opts).pipe res
 
 module.exports = class Routes
   @setupPseudoProxy = (app, namespace, AppNamespace, isRoot) ->
-    Frei ?= AppNamespace
+    Frei = AppNamespace if typeof Frei is 'undefined'
 
     @initial_opts = (req, res) ->
       _url = if isRoot then Frei.config.db.base_url else Frei.config.db.url
       _r = if isRoot then "" else "/#{Frei.config.db.name}"
       url = "#{_url}#{req.originalUrl.replace "/#{namespace}#{_r}", ""}"
       opts = { method: req.method, url : url }
-      opts.headers ?= {}
+      opts.headers = {} if typeof opts.headers is 'undefined'
       opts.headers.Authorization = Frei.config.db_credentials if Frei.config.db_credentials?
       opts.json = req.body if Object.keys(req.body).length
       opts

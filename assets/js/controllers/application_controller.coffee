@@ -77,13 +77,16 @@ class Frei.Controller extends Batman.Controller
     Frei.on 'ready', =>
       $('form').removeAttr('data-formfor-instance').attr('data-formfor-'+@get('defaultModelNameSingular'),'instance')
 
+  edit_to_show : ->
+    @redirect "/#{@get 'defaultModelNamePlural'}/#{@get('instance').get('id')}"
+
   createOrUpdate : ->
     console.log arguments...
     @get('instance').save (err) =>
       if err
         console.error err
       else
-        @redirect "/#{@get 'defaultModelNamePlural'}/#{@get('instance').get('id')}"
+        @edit_to_show()
 
   update : ->
     @createOrUpdate arguments...
@@ -96,6 +99,9 @@ class Frei.Controller extends Batman.Controller
     @DefaultModel.find params.id, (e, modelInstance) =>
       console.error e if e
       @set 'instance', modelInstance if modelInstance
+
+  show_to_edit : ->
+    @redirect "/#{@get 'defaultModelNamePlural'}/#{@get('instance').get('id')}/edit"
 
   placeholderConformantMatcher: 'input[type=text], textarea'
 

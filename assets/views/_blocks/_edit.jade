@@ -1,5 +1,5 @@
 include ../_blocks/_nav
 block edit
-  h1(data-bind="defaultModelName | prepend 'Edit a '", data-event-doubleclick="autofillAll")
+  h1(data-bind="defaultModelName | prepend 'Edit a '", data-event-doubleclick="edit_to_show")
   form(data-formfor-instance='instance', data-event-submit="update")
     block properties

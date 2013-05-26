@@ -13,7 +13,7 @@ module.exports = class CouchLift
     processDirectory "#{_base}/#{n}" if fs.statSync("#{_base}/#{n}").isDirectory() for n in fs.readdirSync _base
 
   @uploadAudioSparks = (newDir, theDBName) =>
-    theDBName ?= 'px' #TODO - DRY theDBName everywhere in this file
+    theDBName = 'px' if typeof theDBName is 'undefined' #TODO - DRY theDBName everywhere in this file
     @lessonsDir = "#{__dirname}/../audio/"
     dir = @lessonsDir+newDir
     if fs.statSync(dir).isDirectory()

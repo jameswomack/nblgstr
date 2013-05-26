@@ -1,4 +1,4 @@
 include ../_blocks/_nav
 block show
-  h1(data-bind="defaultModelName | prepend 'Viewing a '")
+  h1(data-bind="defaultModelName | prepend 'Viewing a '", data-event-doubleclick="show_to_edit")
   block properties

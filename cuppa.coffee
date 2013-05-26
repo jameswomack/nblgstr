@@ -53,7 +53,7 @@ app.get '/views/:controller/:action.html', (req, res) ->
 
 app.get '/uuidURL', (req, res) =>
   opts = method: req.method, url: "#{Frei.config.db.base_url}/_uuids"
-  opts.headers ?= {}
+  opts.headers = {} if typeof opts.headers is 'undefined'
   db_creds = Frei.config.db_credentials
   opts.headers.Authorization = db_creds if db_creds?
   res.contentType opts.headers["content-type"] = opts.headers["accept"] = "application/json"

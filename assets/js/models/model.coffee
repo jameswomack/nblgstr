@@ -26,7 +26,7 @@ class Frei.Model extends Batman.Model
           do (k, v)->
             [ attr, name, style ] = k.split '/'
             style = style.replace /\..*/, ''
-            a.attr[name] ?= {}
+            a.attr[name] = {} if typeof a.attr[name] is 'undefined'
             a.attr[name][style] = v
             a.attr[name][style].filename = k
             _refer.accessor name,
@@ -38,7 +38,8 @@ class Frei.Model extends Batman.Model
 
   @attachment: (attr_name, styles) ->
     @encode '_attachment_styles'
-    a = @__attachment_styles ?= {}
+    @__attachment_styles = {} if typeof @__attachment_styles is 'undefined'
+    a = @__attachment_styles
     a[attr_name] = styles
 
     @accessor attr_name,
@@ -67,7 +68,7 @@ class Frei.Model extends Batman.Model
         for k, v of incomingJSON._attachments when k.indexOf 'attr/' is 0
           [ attr, name, style ] = k.split '/'
           style = style.replace /\..*/, ''
-          a.attr[name] ?= {}
+          a.attr[name] = {} if typeof a.attr[name] is 'undefined'
           a.attr[name][style] = v
           a.attr[name][style].filename = k
         a
@@ -86,8 +87,8 @@ class Frei.Model extends Batman.Model
     for argIndex of arguments
       key = arguments[argIndex]
       if Batman.typeOf key is "String"
-        Batman.Model._keys ?= []
-        Batman.Model._keys[@type] ?= []
+        Batman.Model._keys = {} if typeof Batman.Model._keys is 'undefined'
+        Batman.Model._keys[@type] = [] if typeof Batman.Model._keys[@type] is 'undefined'
         Batman.Model._keys[@type].push key unless Batman.contains Batman.Model._keys[@type], key
     super
 
