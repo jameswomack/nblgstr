@@ -1,7 +1,7 @@
 nav
-  h1.title nblgstr
+  h1.title frei
   - var itemMake = function (o) { return { name: o, route: o.toLowerCase(), controller: o.toLowerCase() }; }
-  - var links = [ itemMake("Projects") ]
+  - var links = [ itemMake("Stores") ]
   ul
     each link in links
       li( class=link.route, data-addclass-active="currentRoute.controller | equals '#{link.controller}'", data-removeclass-active="currentRoute.controller | equals '#{link.controller}' | not" )

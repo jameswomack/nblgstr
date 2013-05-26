@@ -1,4 +1,4 @@
-{ "name": "nblgstr"
+{ "name": "frei"
 , "version": "0.0.1"
 , "dependencies": {
     "express": "~2.5"
@@ -16,7 +16,7 @@
     , "imagemagick": "https://github.com/rsms/node-imagemagick/tarball/master"
   }
 , "batman": {
-    "appName": "nblgstr"
+    "appName": "frei"
     , "build": true
     , "buildDir": "./build"
   },
