@@ -3,7 +3,10 @@ nav
   - var itemMake = function (o) { return { name: o, route: o.toLowerCase(), controller: o.toLowerCase() }; }
   - var links = [ itemMake("Stores") ]
   ul
+    li( data-showif="user_logged_in" )
+      a( href="/logout" ) Logout
+    li( data-hideif="user_logged_in" )
+      a( href="/_login/index.html" ) Login
     each link in links
       li( class=link.route, data-addclass-active="currentRoute.controller | equals '#{link.controller}'", data-removeclass-active="currentRoute.controller | equals '#{link.controller}' | not" )
         a( data-route="routes.#{link.route}", ontouchstart="", ontouchend="" )= link.name
-        span.keycode

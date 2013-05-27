@@ -2,11 +2,7 @@ class Frei.HomeController extends Frei.Controller
   index: ->
     super arguments...
 
-    console.log 'index'
-
     Frei.on 'ready', =>
-      console.log 'ready'
-
       @set 'showLoginForm', yes if !@get('loggedIn')
 
       @set 'emailField', $("input#emailField")
@@ -17,7 +13,6 @@ class Frei.HomeController extends Frei.Controller
 
       @get('registeringSwitch').on "change", (event) =>
         @set 'registering', @get('registeringSwitch').is(':checked')
-        console.log(@get 'registering')
 
 
   @wrapAccessor 'registered', (core) ->

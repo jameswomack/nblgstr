@@ -92,7 +92,6 @@ module.exports = class Routes
         continue unless orig.data
         for style, size of style_hash
           [ w, h ] = size.split 'x'
-          console.log w,h
           do (w,h,orig,style,size,attr) =>
             format = MimeTypes.ext(orig.content_type)
             oo = originals["attr/#{attr}/#{style}"] = content_type: orig.content_type

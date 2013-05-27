@@ -11,9 +11,13 @@ passport = require('passport')
 LocalStrategy = require('passport-local').Strategy
 RedisStore = require('connect-redis')(express)
 
+CookieJar = require './app/models/cookie_jar'
+UserController = require './app/controllers/user_controller'
+
 Frei.root = path.normalize "#{__dirname}"
 Frei.app  = app = express.createServer()
 Frei.env  = process.env["NODE_ENV"] || "development"
+Frei.noAuthPath = "/_login/index.html"
 
 __lib     = "#{Frei.root}/lib"
 __public  = "#{Frei.root}/public"
@@ -42,7 +46,7 @@ app.configure ->
   app.use(express.session({
       secret: 'X3n0ph0bic1984',
       store: new RedisStore,
-      cookie: { secure: false, maxAge:86400000 }
+      cookie: { secure: false, maxAge:CookieJar.cookieMaxAge }
   }))
   app.use(passport.initialize())
   app.use(passport.session())
@@ -66,7 +70,6 @@ passport.serializeUser (user, done) ->
 
 passport.deserializeUser (id, done) ->
   process.nextTick ->
-    console.log "FUCK: #{id}"
     Frei.db.get id, (err, user) ->
       done null, user
 
@@ -77,31 +80,31 @@ passport.use new LocalStrategy((username, password, done) ->
 )
 
 ensureAuthenticated = (req, res, next) ->
-  console.log arguments...
-  return next()  if req.isAuthenticated()
-  res.redirect "/_login/index.html"
+  if req.isAuthenticated()
+    return next()
+  res.redirect Frei.noAuthPath
 
 app.post "/login", passport.authenticate("local",
   successRedirect: "/"
-  failureRedirect: "/_login/index.html"
+  failureRedirect: Frei.noAuthPath
 )
 
+app.get "/logout", (req, res) ->
+  CookieJar.resCookie res, 'user_id', null
+  req.logout()
+  res.redirect Frei.noAuthPath
+
 app.get '/views/:controller/edit.html', ensureAuthenticated, (req, res) ->
-  console.log "WTF: #{req.isAuthenticated()}"
-  console.log 'views'
   res.render "#{req.params.controller}/edit"
 
 app.get '/views/:controller/new.html', ensureAuthenticated, (req, res) ->
-  console.log "WTF: #{req.isAuthenticated()}"
-  console.log 'views'
   res.render "#{req.params.controller}/new"
 
 app.get '/views/:controller/:action.html', (req, res) ->
-  console.log "I don't require auth"
+  console.debug req.params
   res.render "#{req.params.controller}/#{req.params.action}"
 
 app.get '/uuidURL', ensureAuthenticated, (req, res) =>
-  console.log 'uuidURL'
   opts = method: req.method, url: "#{Frei.config.db.base_url}/_uuids"
   opts.headers = {} if typeof opts.headers is 'undefined'
   db_creds = Frei.config.db_credentials
@@ -115,7 +118,6 @@ app.get /^\/img\/([^/]+)\/([^.]+)/, (req, res) ->
   request("#{Frei.config.db.url}/#{id}/#{path}").pipe res
 
 app.post '/upload', ensureAuthenticated, (req, res) ->
-  console.log 'upload'
   if req.files.picture isnt undefined
     require("#{__lib}/fotoshop").fit req.files.picture.path, 1024, 768, (anError, theImage, theMIME) =>
       _base64data = (new Buffer theImage, 'binary').toString('base64') unless anError
@@ -125,7 +127,7 @@ app.post '/upload', ensureAuthenticated, (req, res) ->
     res.json error: err
 
 app.get '/*', (req, res) ->
-  console.log '/*'
+  CookieJar.resCookie res, 'user_id', UserController.idFromReq(req)
   res.render "index",
       layout: false
       node_env: Frei.env

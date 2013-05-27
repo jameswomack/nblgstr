@@ -32,5 +32,9 @@ block properties
     label
       span Zip
       span.modelValue(data-bind='instance.zip', type="text")
+  div
+    label
+      span Created by
+      span.modelValue(data-bind='instance.user.email', type="text")
   div.project_picture
     img(data-bind-src="instance.picture", data-showif="instance.picture")

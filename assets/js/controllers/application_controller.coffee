@@ -1,6 +1,8 @@
 class Frei.Controller extends Batman.Controller
 
+
   @accessor 'routingKey', -> Batman.functionName( @constructor).replace /Controller$/, ''
+
 
   @accessor "list",
     get: ->
@@ -9,8 +11,10 @@ class Frei.Controller extends Batman.Controller
       else
         @get "#{@get 'defaultModelNamePlural'}"
 
+
   jQuery.expr[":"].contains = (a, i, m) ->
     jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0
+
 
   adjustListForSearchNode : (node) ->
     cb = (e,env) =>
@@ -28,11 +32,14 @@ class Frei.Controller extends Batman.Controller
         @resetSearch node, true
     Frei.CouchStorage.couchView "#{@get 'defaultModelNameSingular'}_search", {startkey:'"'+$(node).val()+'"', endkey:'"'+$(node).val()+'zzzzz"'}, cb
 
+
   resetSearch : (node, keepText) ->
     @set 'searching', no
 
+
   filter : (node) ->
     if $(node).val().length == 0 then @resetSearch(node) else @adjustListForSearchNode(node)
+
 
   constructor : ->
     k = Batman.helpers.singularize(@constructor.toString().split('function ')[1].split('() {')[0].split('Controller')[0])
@@ -43,14 +50,17 @@ class Frei.Controller extends Batman.Controller
     @set 'Frei', Frei
     super arguments...
 
+
   goToNew : ->
     @redirect "/#{@get 'defaultModelNamePlural'}/new"
+
 
   new : ->
     @set "instance", new @DefaultModel
     @set 'cameraView', new Frei.CameraView instance: @get('instance')
     Frei.on 'ready', =>
         $('form').removeAttr('data-formfor-instance').attr('data-formfor-'+@get('defaultModelNameSingular'),'instance')
+
 
   index : ->
     if @DefaultModel
@@ -59,7 +69,9 @@ class Frei.Controller extends Batman.Controller
         console.error e if e
         @set "#{@get 'defaultModelNamePlural'}", list if list
 
+
   index_destroy : (n) ->
+    return unless @has_edit_permission()
     node = $(n)
     id = node.attr('title')
     @DefaultModel.find id, (e, instance) =>
@@ -69,31 +81,48 @@ class Frei.Controller extends Batman.Controller
         instance.destroy()
         node.parent().hide('slow')
 
+
+  has_edit_permission: ->
+    Boolean(@get('instance.user.id') is $.cookie('user_id'))
+
+
+  @accessor 'user_logged_in',
+    get: ->
+      $.cookie('user_id') != 'undefined'
+
+
   edit : (params) ->
+    return unless @has_edit_permission()
     @set "instance", new @DefaultModel
     @DefaultModel.find params.id, (e, instance) =>
       console.error e if e
-      @set "instance", instance if instance
+      @set "instance", instance
       @set 'cameraView', new Frei.CameraView instance: instance
+
     Frei.on 'ready', =>
       $('form').removeAttr('data-formfor-instance').attr('data-formfor-'+@get('defaultModelNameSingular'),'instance')
+
 
   edit_to_show : ->
     @redirect "/#{@get 'defaultModelNamePlural'}/#{@get('instance').get('id')}"
 
+
   createOrUpdate : ->
-    console.log arguments...
+    return unless @has_edit_permission()
     @get('instance').save (err) =>
       if err
         console.error err
       else
         @edit_to_show()
 
+
   update : ->
     @createOrUpdate arguments...
 
+
   create : ->
     @createOrUpdate arguments...
+
 
   show : (params) ->
     @set 'instance', new Batman.Object
@@ -101,10 +130,14 @@ class Frei.Controller extends Batman.Controller
       console.error e if e
       @set 'instance', modelInstance if modelInstance
 
+
   show_to_edit : ->
+    return unless @has_edit_permission()
     @redirect "/#{@get 'defaultModelNamePlural'}/#{@get('instance').get('id')}/edit"
 
+
   placeholderConformantMatcher: 'input[type=text], textarea'
+
 
   autofillNode : (n) ->
     placeholder_conformant_n = $(n).find(@placeholderConformantMatcher)[0]
@@ -113,8 +146,10 @@ class Frei.Controller extends Batman.Controller
     data_bind_key = placeholder_conformant.attr('data-bind').split('.')[1]
     @set "instance.#{data_bind_key}", placeholder
 
+
   autofill : (n, e) ->
     @autofillNode n
+
 
   autofillAll : (n, e) ->
     $(n).parent().find('label').each (idx, n) =>

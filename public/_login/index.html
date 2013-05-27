@@ -1,6 +1,24 @@
 <html>
+  <head>
+    <script src="../js/vendor/jquery.js"></script>
+    <script src="../js/vendor/jquery.cookie.js"></script>
+    <link href="../css/screen.css" rel="stylesheet" type="text/css" />
+  </head>
+<body>
   <form method="POST" action="/login">
-    <input name="username"/>
-    <input name="password"/>
-    <input type="submit" value="submit"/>
-    </form>
+    <div>
+      <h2>Login</h2>
+      <label>
+        <span>Email</span>
+        <input name="username" placeholder="foo@bar.quux" type="email" autofocus="true" required="required" id="emailField"/>
+      </label>
+      <label>
+        <span>Password</span>
+        <input name="password" type="password"/>
+      </label>
+      <label>
+        <input type="submit" value="Submit"/>
+      </label>
+    </div>
+  </form>
+</body>

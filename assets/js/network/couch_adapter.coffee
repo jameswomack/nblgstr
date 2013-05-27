@@ -47,6 +47,11 @@ class Frei.CouchStorage extends Batman.RestStorage
       $.get '/uuidURL', (o) =>
         _data._id = o.uuid
         _data.created_time = new Date().toJSON()
+        if !_data.p_user?._id
+          _data.p_user = {_id: $.cookie('user_id')}
+          console.debug _data.p_user
+        else if _data.p_user._id != $.cookie('user_id')
+          throw new Frei.DevelopmentError "Object not belonging to current user was edited"
         @readyToSave env, _data, next
 
   readyToSave: (env, data, next) ->
@@ -80,7 +85,6 @@ class Frei.CouchStorage extends Batman.RestStorage
       next()
 
   @couchView: (view, data = {}, cb) ->
-    console.log arguments
     data.include_docs = 'true' unless data.include_docs?
     new Batman.Request
       url: @::urlForCollection( Object.extended(), options: data: view: view)
