@@ -36,4 +36,8 @@ design.views.user_search = {
   map: (d) ->
     emit d._id, d._id if d.t is 'user'
 }
+design.views.user_pass_search = {
+  map: (d) ->
+    emit [d._id, d.password], d._id if d.t is 'user'
+}
 module.exports = design

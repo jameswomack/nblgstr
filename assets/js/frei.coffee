@@ -1,5 +1,5 @@
 class @Frei extends Batman.App
-  @root 'home#index'
+  @root 'stores#index'
 
   @resources 'users'
   @resources 'stores'

@@ -7,6 +7,9 @@ assets  = require 'connect-assets'
 sugar   = require 'sugar'
 request = require 'request'
 fs      = require 'fs'
+passport = require('passport')
+LocalStrategy = require('passport-local').Strategy
+RedisStore = require('connect-redis')(express)
 
 Frei.root = path.normalize "#{__dirname}"
 Frei.app  = app = express.createServer()
@@ -34,6 +37,15 @@ app.configure ->
 
   app.use express.static __public
   app.use express.bodyParser keepExtensions: true, uploadDir: __uploads
+  app.use(express.cookieParser())
+  app.use(express.methodOverride())
+  app.use(express.session({
+      secret: 'X3n0ph0bic1984',
+      store: new RedisStore,
+      cookie: { secure: false, maxAge:86400000 }
+  }))
+  app.use(passport.initialize())
+  app.use(passport.session())
 
   app.set 'view options', layout: false
   app.set 'views', "#{__assets}/views"
@@ -48,10 +60,39 @@ mack = new Mack
 mack.on 'addressFound', (a) =>
   @MACaddress = a
 
-app.get '/views/:controller/:action.html', (req, res) ->
+
+passport.serializeUser (user, done) ->
+  done null, user.id
+
+passport.deserializeUser (id, done) ->
+  process.nextTick ->
+    console.log "FUCK: #{id}"
+    Frei.db.get id, (err, user) ->
+      done null, user
+
+passport.use new LocalStrategy((username, password, done) ->
+  process.nextTick ->
+    Frei.db.view 'app/user_pass_search', { key: [username, password] }, (err, docs) ->
+      done null, docs[0]
+)
+
+ensureAuthenticated = (req, res, next) ->
+  console.log arguments...
+  return next()  if req.isAuthenticated()
+  res.redirect "/_login/index.html"
+
+app.post "/login", passport.authenticate("local",
+  successRedirect: "/"
+  failureRedirect: "/_login/index.html"
+)
+
+app.get '/views/:controller/:action.html', ensureAuthenticated, (req, res) ->
+  console.log "WTF: #{req.isAuthenticated()}"
+  console.log 'views'
   res.render "#{req.params.controller}/#{req.params.action}"
 
-app.get '/uuidURL', (req, res) =>
+app.get '/uuidURL', ensureAuthenticated, (req, res) =>
+  console.log 'uuidURL'
   opts = method: req.method, url: "#{Frei.config.db.base_url}/_uuids"
   opts.headers = {} if typeof opts.headers is 'undefined'
   db_creds = Frei.config.db_credentials
@@ -64,7 +105,8 @@ app.get /^\/img\/([^/]+)\/([^.]+)/, (req, res) ->
   [ id, path ] = req.params[0..1]
   request("#{Frei.config.db.url}/#{id}/#{path}").pipe res
 
-app.post '/upload', (req, res) ->
+app.post '/upload', ensureAuthenticated, (req, res) ->
+  console.log 'upload'
   if req.files.picture isnt undefined
     require("#{__lib}/fotoshop").fit req.files.picture.path, 1024, 768, (anError, theImage, theMIME) =>
       _base64data = (new Buffer theImage, 'binary').toString('base64') unless anError
@@ -73,14 +115,15 @@ app.post '/upload', (req, res) ->
     err = new Error "req.files.picture is undefined"
     res.json error: err
 
-app.get '/*', (req, res) ->
+app.get '/*', ensureAuthenticated, (req, res) ->
+  console.log '/*'
   res.render "index",
-    layout: false
-    node_env: Frei.env
-    stylesheet: asset_helper.css("screen")
-    scripts: asset_helper.js("app")
-    title: "Mobile & Web Software Development | Noble Gesture"
-    status: 200
+      layout: false
+      node_env: Frei.env
+      stylesheet: asset_helper.css("screen")
+      scripts: asset_helper.js("app")
+      title: "Mobile & Web Software Development | Noble Gesture"
+      status: 200
 
 if module.parent
   module.exports = Frei
