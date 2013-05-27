@@ -4,7 +4,7 @@ block index_main
    input( type="text", name="knowHow", placeholder="Search project by name", data-event-keyup="filter" )
    input( type="button", value="reset", data-event-click="resetSearch"  )
   p#matchStats
-  ul
+  ul( data-showif="user_logged_in" )
    li( class="index new" )
      span( class="title", data-event-click="goToNew" ) Fill-out New Instance
   div#container

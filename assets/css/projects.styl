@@ -23,15 +23,23 @@ form
   background-color: rgba(255,255,255,0.3)
   padding: 12px 12px 36px 12px
 
-label span
+label>span:first-child
   width: 100px
   margin: 10px
   text-align: right
   display: inline-block
+  vertical-align: middle
 
-span.modelValue
+span.modelValue, span.modelValueInline
   text-align: left
   color: #ccc
+  display: inline
+  float: left
+
+div.modelValueInlineContainer
+  display: inline-block
+  width: 200px
+  vertical-align: middle
 
 input[type=text], textarea, span.modelValue
   width: 200px
@@ -49,6 +57,18 @@ button.camera, div.camera
   font-family: base_font_family
   background: url(/img/camera.png) no-repeat 12px 8px, linear-gradient(top, #fff, #f2f2f2)
   border-color: #e1e1e1
+
+div#other_container
+    width 300px
+    margin 12px auto
+    div.map
+      height 360px
+      #map
+        height: 360px
+        .leaflet-popup-content
+          strong
+            color black
+            font 12px base_font_family
 
 div.camera_container
   height: 68px
@@ -91,5 +111,6 @@ div.project_picture
   margin: 0px auto 12px auto
 
 div.project_picture img
-  max-height: 300px
+  max-height: 150px
   max-width: 300px
+  border-radius: 12px

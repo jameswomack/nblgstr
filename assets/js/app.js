@@ -17,6 +17,7 @@
 //= require_tree models
 //= require_tree errors
 //= require_tree view_models
+//= require_tree delegates
 //= require controllers/application_controller
 //= require_tree controllers
 

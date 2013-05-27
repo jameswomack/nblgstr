@@ -6,7 +6,18 @@ nav
     li( data-showif="user_logged_in" )
       a( href="/logout" ) Logout
     li( data-hideif="user_logged_in" )
-      a( href="/_login/index.html" ) Login
+      form(method='POST', action='/login')
+        div
+          h2 Login
+          label
+            span Email
+            input#emailField(name='username', placeholder='foo@bar.quux', type='email', autofocus='true', required='required')
+          label
+            span Password
+            input(name='password', type='password')
+          label
+            input(type='submit', value='Submit')
+
     each link in links
       li( class=link.route, data-addclass-active="currentRoute.controller | equals '#{link.controller}'", data-removeclass-active="currentRoute.controller | equals '#{link.controller}' | not" )
         a( data-route="routes.#{link.route}", ontouchstart="", ontouchend="" )= link.name

@@ -1,40 +1,44 @@
 extends ../_blocks/_show
 block properties
+  div.project_picture
+    img(data-bind-src="instance.picture", data-showif="instance.picture_medium")
   div
     label
       span Title
-      span.modelValue(type='text', data-bind='instance.title')
+      div.modelValueInlineContainer
+        span.modelValue(type='text', data-bind='instance.title')
   div
     label
       span Description
-      span.modelValue(data-bind='instance.description')
+      div.modelValueInlineContainer
+        span.modelValue(data-bind='instance.description')
   div
     label
       span Website
-      span.modelValue(data-bind='instance.website', type="text")
+      div.modelValueInlineContainer
+        span.modelValue(data-bind='instance.website', type="text")
   div
     label
       span Phone
-      span.modelValue(data-bind='instance.phone', type="text")
+      div.modelValueInlineContainer
+        span.modelValue(data-bind='instance.phone', type="text")
   div
     label
-      span Street
-      span.modelValue(data-bind='instance.street', type="text")
+      span Address
+      div.modelValueInlineContainer
+        span.modelValueInline(data-bind='instance.street', type="text")
+        span.modelValueInline &nbsp;
+        br
+        span.modelValueInline(data-bind='instance.city', type="text")
+        span.modelValueInline ,
+        span.modelValueInline(data-bind='instance.state', type="text")
+        span.modelValueInline &nbsp;
+        span.modelValueInline(data-bind='instance.zip', type="text")
+  div#other_container
+    div.map
+      div#map
   div
     label
-      span City
-      span.modelValue(data-bind='instance.city', type="text")
-  div
-    label
-      span State
-      span.modelValue(data-bind='instance.state', type="text")
-  div
-    label
-      span Zip
-      span.modelValue(data-bind='instance.zip', type="text")
-  div
-    label
-      span Created by
-      span.modelValue(data-bind='instance.user.email', type="text")
-  div.project_picture
-    img(data-bind-src="instance.picture", data-showif="instance.picture")
+      span Added by
+      div.modelValueInlineContainer
+        span.modelValue(data-bind='instance.user.email', type="text")

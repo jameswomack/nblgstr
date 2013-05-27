@@ -1,6 +1,10 @@
 class Frei.Controller extends Batman.Controller
 
 
+  @afterFilter ->
+    $.cookie 'back_url', location.pathname
+
+
   @accessor 'routingKey', -> Batman.functionName( @constructor).replace /Controller$/, ''
 
 
@@ -71,19 +75,23 @@ class Frei.Controller extends Batman.Controller
 
 
   index_destroy : (n) ->
-    return unless @has_edit_permission()
     node = $(n)
     id = node.attr('title')
     @DefaultModel.find id, (e, instance) =>
       if e
         console.error e
       else
+        return unless @has_edit_permission(instance)
         instance.destroy()
         node.parent().hide('slow')
 
 
-  has_edit_permission: ->
-    Boolean(@get('instance.user.id') is $.cookie('user_id'))
+  has_edit_permission: (instance) ->
+    if instance?
+      _instance = instance
+    else
+      _instance = @get('instance')
+    Boolean(_instance.get('user.id') is $.cookie('user_id'))
 
 
   @accessor 'user_logged_in',
@@ -129,11 +137,34 @@ class Frei.Controller extends Batman.Controller
     @DefaultModel.find params.id, (e, modelInstance) =>
       console.error e if e
       @set 'instance', modelInstance if modelInstance
+      @setup_location()
 
 
   show_to_edit : ->
     return unless @has_edit_permission()
     @redirect "/#{@get 'defaultModelNamePlural'}/#{@get('instance').get('id')}/edit"
+
+
+  show_location : (lat, lon, title, src) ->
+    coordinate = [lat, lon]
+    if !@map
+      @map = L.map('map').setView(coordinate, 16)
+    L.tileLayer('http://{s}.tile.cloudmade.com/05afaa8abaa74deaabbf7c99e68bc716/997/256/{z}/{x}/{y}.png', {
+        maxZoom: 18
+    }).addTo(@map)
+    marker = L.marker(coordinate).addTo(@map)
+    marker.bindPopup("<img src=\"#{src}\" width=\"60\"/><br><strong>#{title}</strong>").openPopup()
+
+
+  setup_location : ->
+    coordReq = Frei.NominatumMessenger.coordinatesFromStreetAndCity
+    inst = @get 'instance'
+    coordReq inst.get('street'), inst.get('city'), inst.get('state'), (lat, lon) =>
+      @set 'instance.latitude', lat
+      @set 'instance.longitude', lon
+      @show_location lat, lon, @get('instance.title') || @get('instance.name'), @get('instance.picture_thumb')
+    , =>
+      $('#map').text("Could not map this address")
 
 
   placeholderConformantMatcher: 'input[type=text], textarea'

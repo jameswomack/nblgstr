@@ -92,7 +92,7 @@ app.post "/login", passport.authenticate("local",
 app.get "/logout", (req, res) ->
   CookieJar.resCookie res, 'user_id', null
   req.logout()
-  res.redirect Frei.noAuthPath
+  res.redirect req.header('Referer') || Frei.noAuthPath
 
 app.get '/views/:controller/edit.html', ensureAuthenticated, (req, res) ->
   res.render "#{req.params.controller}/edit"
@@ -101,7 +101,6 @@ app.get '/views/:controller/new.html', ensureAuthenticated, (req, res) ->
   res.render "#{req.params.controller}/new"
 
 app.get '/views/:controller/:action.html', (req, res) ->
-  console.debug req.params
   res.render "#{req.params.controller}/#{req.params.action}"
 
 app.get '/uuidURL', ensureAuthenticated, (req, res) =>
@@ -127,6 +126,7 @@ app.post '/upload', ensureAuthenticated, (req, res) ->
     res.json error: err
 
 app.get '/*', (req, res) ->
+  Frei.back_url = req.cookies.back_url
   CookieJar.resCookie res, 'user_id', UserController.idFromReq(req)
   res.render "index",
       layout: false
