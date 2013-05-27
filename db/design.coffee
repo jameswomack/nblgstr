@@ -28,13 +28,12 @@ design = {
   , shows: {}
 }
 
-design.views.project_search = {
-  map: (d) ->
-    emit d.title, d._id if d.t is 'project'
-}
-
 design.views.store_search = {
   map: (d) ->
     emit d.title, d._id if d.t is 'store'
+}
+design.views.user_search = {
+  map: (d) ->
+    emit d._id, d._id if d.t is 'user'
 }
 module.exports = design

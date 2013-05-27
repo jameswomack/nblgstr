@@ -40,6 +40,7 @@ module.exports = class Routes
       opts.headers = {} if typeof opts.headers is 'undefined'
       opts.headers.Authorization = Frei.config.db_credentials if Frei.config.db_credentials?
       opts.json = req.body if Object.keys(req.body).length
+      # TODO - insert user data here from session if missing on update or create
       opts
 
     app.get /^\/img\/(att\/)?([^/]+)\/([^.]+)/, (req, res) ->

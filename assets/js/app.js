@@ -1,5 +1,6 @@
-//= require vendor/jquery
+//= require vendor/jquery.js
 //= require vendor/jquery-ui.min.js
+//= require vendor/jquery.cookie.js
 
 //= require vendor/batman
 

@@ -1,8 +1,10 @@
 class @Frei extends Batman.App
-  @root 'projects#index'
+  @root 'home#index'
 
+  @resources 'users'
   @resources 'stores'
 
+  @route 'home', "home#index"
   @route 'error', "error#index"
 
   @env = window.node_env

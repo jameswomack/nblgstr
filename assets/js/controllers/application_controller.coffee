@@ -53,10 +53,11 @@ class Frei.Controller extends Batman.Controller
         $('form').removeAttr('data-formfor-instance').attr('data-formfor-'+@get('defaultModelNameSingular'),'instance')
 
   index : ->
-    @set "#{@get 'defaultModelNamePlural'}", new Batman.Set
-    @DefaultModel.load (e, list) =>
-      console.error e if e
-      @set "#{@get 'defaultModelNamePlural'}", list if list
+    if @DefaultModel
+      @set "#{@get 'defaultModelNamePlural'}", new Batman.Set
+      @DefaultModel.load (e, list) =>
+        console.error e if e
+        @set "#{@get 'defaultModelNamePlural'}", list if list
 
   index_destroy : (n) ->
     node = $(n)

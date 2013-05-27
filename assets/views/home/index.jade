@@ -1,10 +1,9 @@
 extends ../_blocks/_index
-block list-item
+block index_main
   div#formContainer
-    h1(data-bind="Login")
-    form(data-formfor-instance='user', data-event-submit="loginForm.handleUser", data-showif="loginForm.showLoginForm")
-      block properties
-      div(data-view="loginForm", id="loginForm")
+    h2(data-bind="Login")
+    form(data-formfor-instance='user', data-event-submit="handleUser", data-showif="showLoginForm")
+      div(id="loginForm")
         label
           span Email
           input(type="email", autofocus="true", required="required", placeholder="foo@bar.quux", id="emailField")
@@ -13,7 +12,7 @@ block list-item
           input(type="password", required="required", id="passwordField")
         label
           span Register?
-          input(type="checkbox", checked="", id="registeringSwitch")
+          input(type="checkbox", id="registeringSwitch")
         input(type="submit", value="Submit")
-    p(id="login_status", data-hideif="loginForm.registering" data-bind="loginForm.loginStatus")
-    p(id="registration_status", data-showif="loginForm.registering", data-bind="loginForm.registrationStatus")
+    p(id="login_status", data-hideif="registering", data-bind="loginStatus")
+    p(id="registration_status", data-showif="registering", data-bind="registrationStatus")
