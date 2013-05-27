@@ -86,9 +86,18 @@ app.post "/login", passport.authenticate("local",
   failureRedirect: "/_login/index.html"
 )
 
-app.get '/views/:controller/:action.html', ensureAuthenticated, (req, res) ->
+app.get '/views/:controller/edit.html', ensureAuthenticated, (req, res) ->
   console.log "WTF: #{req.isAuthenticated()}"
   console.log 'views'
+  res.render "#{req.params.controller}/edit"
+
+app.get '/views/:controller/new.html', ensureAuthenticated, (req, res) ->
+  console.log "WTF: #{req.isAuthenticated()}"
+  console.log 'views'
+  res.render "#{req.params.controller}/new"
+
+app.get '/views/:controller/:action.html', (req, res) ->
+  console.log "I don't require auth"
   res.render "#{req.params.controller}/#{req.params.action}"
 
 app.get '/uuidURL', ensureAuthenticated, (req, res) =>
@@ -115,7 +124,7 @@ app.post '/upload', ensureAuthenticated, (req, res) ->
     err = new Error "req.files.picture is undefined"
     res.json error: err
 
-app.get '/*', ensureAuthenticated, (req, res) ->
+app.get '/*', (req, res) ->
   console.log '/*'
   res.render "index",
       layout: false
