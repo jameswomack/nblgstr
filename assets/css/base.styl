@@ -124,7 +124,28 @@ div.inputContainer
     width 72px
 
 h1 input[name=knowHow]
-  width: 520px
+  animation-duration: 1s
+  width: 500px
+  -webkit-animation-name: disco
+  -webkit-animation-duration: 2s
+  -webkit-animation-iteration-count: infinite
+
+h1 input[name=knowHow]:focus
+  animation-duration: 0.5s
+  animation-name: grow
+  -webkit-animation-fill-mode: forwards
+
+@keyframes disco {
+  0%   { background: #fff;}
+  25%   { background: #eee; animation-timing-function: ease-in;}
+  50%   { background: #ccc;}
+  75% { background: #eee; animation-timing-function: ease-in;}
+  100% { background: #fff; }
+}
+
+@keyframes grow {
+  100% {width: 520px}
+}
 
 h1
   text-transform uppercase

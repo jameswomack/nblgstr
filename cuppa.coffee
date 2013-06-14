@@ -10,6 +10,7 @@ fs      = require 'fs'
 passport = require('passport')
 LocalStrategy = require('passport-local').Strategy
 RedisStore = require('connect-redis')(express)
+expressUglify = require 'express-uglify'
 
 CookieJar = require './app/models/cookie_jar'
 UserController = require './app/controllers/user_controller'
@@ -38,6 +39,10 @@ app.configure ->
   app.use assets( src: __assets, pathsOnly: true, jsCompilers: compilers, helperContext: asset_helper)
 
   app.use "/#{a}", express.static "#{__assets}/#{a}" for a in fs.readdirSync __assets
+
+  app.use expressUglify.middleware
+    src: __public,
+    logLevel: 'info',
 
   app.use express.static __public
   app.use express.bodyParser keepExtensions: true, uploadDir: __uploads

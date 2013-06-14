@@ -1,0 +1,51 @@
+#!/usr/bin/env coffee
+
+cradle = require 'cradle'
+
+
+env = process.env
+(u = env.COUCH_USERNAME
+p = env.COUCH_PASSWORD) if env.COUCH_USERNAME and env.COUCH_PASSWORD
+connection_params = ['localhost', 5984, cache: true]
+connection_params.push {auth: {username: u, password: p}} if u and p
+couch = new(cradle.Connection)(connection_params...)
+dbName = 'ab'
+db = couch.database(dbName)
+
+
+class PugCreator
+  constructor: (program,unit,grade) ->
+    docId = "#{program}_#{unit}_#{grade}"
+    date = JSON.stringify(new Date()).replace(/\"/g,'')
+    body =
+      program: program
+      grade: [Number(grade)]
+      units: [Number(unit)]
+      updated_at: date
+      created_at: date
+      type: "Pug"
+
+    db.save docId, body, (err, res) ->
+      if res
+        console.log "PugCreator successfully created Pug #{docId} in database #{dbName}", res
+      if err
+        console.log err
+
+
+class SchoolPugger
+  constructor: (schoolIds, pugIds) ->
+    for schoolDocId in schoolIds
+      do (schoolDocId) ->
+        db.merge schoolDocId, {pug_ids:pugIds}, (err, doc) =>
+          console.log(doc)
+
+
+p = new PugCreator "el","8","2"
+
+
+# el_7_2, es_5_6, el_8_2
+pugDocIds = ["1ff96170cadbc135404d27d4921e6e7c","1ff96170cadbc135404d27d4921e60a9","el_8_2"]
+
+schoolDocIds = ['98103fb919297290a1e76562e21f73d8','98103fb919297290a1e76562e21f820d','98103fb919297290a1e76562e21fc69a','c840ef393f3a9109098d0b00c01f0752','1ff96170cadbc135404d27d4921e540c','c840ef393f3a9109098d0b00c01f1714','c840ef393f3a9109098d0b00c01f2c1b','98103fb919297290a1e76562e21fa28b']
+
+s = new SchoolPugger schoolDocIds,pugDocIds

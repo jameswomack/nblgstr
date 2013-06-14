@@ -19,6 +19,8 @@
 		<dict>
 			<key>filename</key>
 			<string>Cakefile</string>
+			<key>lastUsed</key>
+			<date>2013-05-27T22:23:27Z</date>
 		</dict>
 		<dict>
 			<key>expanded</key>
@@ -42,11 +44,13 @@
 			<key>filename</key>
 			<string>cuppa.coffee</string>
 			<key>lastUsed</key>
-			<date>2013-05-27T07:34:16Z</date>
+			<date>2013-06-10T16:14:35Z</date>
 			<key>selected</key>
 			<true/>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>db</string>
 			<key>regexFolderFilter</key>
@@ -55,6 +59,8 @@
 			<string>db</string>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>lib</string>
 			<key>regexFolderFilter</key>
@@ -85,164 +91,59 @@
 	<integer>273</integer>
 	<key>metaData</key>
 	<dict>
-		<key>assets/js/controllers/application_controller.coffee</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>22</integer>
-				<key>line</key>
-				<integer>93</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>44</integer>
-		</dict>
-		<key>assets/js/controllers/stores_controller.coffee</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>assets/views/_blocks/_head.jade</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>6</integer>
-				<key>line</key>
-				<integer>17</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>assets/views/_blocks/_index.jade</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>35</integer>
-				<key>line</key>
-				<integer>6</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>assets/views/_blocks/_nav.jade</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>19</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>assets/views/home/index.jade</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>112</integer>
-				<key>line</key>
-				<integer>8</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>assets/views/stores/show.jade</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>16</integer>
-				<key>line</key>
-				<integer>16</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>cuppa.coffee</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>19</integer>
+				<integer>11</integer>
 				<key>line</key>
-				<integer>88</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>78</integer>
-		</dict>
-		<key>public/_login/index.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>7</integer>
+				<integer>97</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>94</integer>
 			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>9</integer>
-				<key>line</key>
-				<integer>22</integer>
-			</dict>
-			<key>selectTo</key>
 			<dict>
 				<key>column</key>
 				<integer>2</integer>
 				<key>line</key>
-				<integer>7</integer>
+				<integer>97</integer>
 			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>11</integer>
+				<key>line</key>
+				<integer>97</integer>
+			</dict>
+		</dict>
+		<key>public/_login/index.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>7</integer>
+				<key>line</key>
+				<integer>23</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>assets/views/_blocks/_head.jade</string>
-		<string>assets/views/_blocks/_index.jade</string>
-		<string>assets/views/_blocks/_nav.jade</string>
-		<string>cuppa.coffee</string>
 		<string>public/_login/index.html</string>
-		<string>assets/js/controllers/stores_controller.coffee</string>
-		<string>assets/views/stores/show.jade</string>
-		<string>assets/views/home/index.jade</string>
-		<string>assets/js/controllers/application_controller.coffee</string>
+		<string>cuppa.coffee</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{337, 88}, {1105, 1090}}</string>
+	<string>{{784, 280}, {1508, 1068}}</string>
 </dict>
 </plist>

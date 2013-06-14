@@ -1,24 +1,26 @@
-{ "name": "frei"
-, "version": "0.0.1"
-, "dependencies": {
-    "express": "~2.5"
-    , "stylus": "~0.27"
-    , "nib": "~0.4"
-    , "coffee-script": "~1.6.x"
-    , "sugar": "~1.2"
-    , "connect-assets": "2.2"
-    , "request": "2.x"
-    , "cradle": "~0.6.4"
-    , "batman": "~0.12.0"
-    , "jade": "~0.26"
-    , "mime": "~1.2.6"
-    , "q": "0.8.x"
-    , "imagemagick": "https://github.com/rsms/node-imagemagick/tarball/master"
-  }
-, "batman": {
-    "appName": "frei"
-    , "build": true
-    , "buildDir": "./build"
+{
+  "name": "frei",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "~2.5",
+    "stylus": "~0.27",
+    "nib": "~0.4",
+    "coffee-script": "~1.6.x",
+    "sugar": "~1.2",
+    "connect-assets": "2.2",
+    "request": "2.x",
+    "cradle": "~0.6.4",
+    "batman": "~0.12.0",
+    "jade": "~0.26",
+    "mime": "~1.2.6",
+    "q": "0.8.x",
+    "imagemagick": "https://github.com/rsms/node-imagemagick/tarball/master",
+    "express-uglify": "~0.3.1"
+  },
+  "batman": {
+    "appName": "frei",
+    "build": true,
+    "buildDir": "./build"
   },
   "private": true,
   "scripts": {

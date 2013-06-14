@@ -1,5 +1,9 @@
 module.exports = class CouchLift
 
+  # TODO - user this class to upload all media and associate with a given model
+    # It may be used as the back-end to a mass uploader web GUI and definitely
+    # locally as a cmd tool for James
+  [cs,file,dbname,parentType,parentId] =  process.argv
 
   fs = require 'fs'
   path = require 'path'
@@ -13,7 +17,7 @@ module.exports = class CouchLift
     processDirectory "#{_base}/#{n}" if fs.statSync("#{_base}/#{n}").isDirectory() for n in fs.readdirSync _base
 
   @uploadAudioSparks = (newDir, theDBName) =>
-    theDBName = 'px' if typeof theDBName is 'undefined' #TODO - DRY theDBName everywhere in this file
+    theDBName = 'frei' if typeof theDBName is 'undefined' #TODO - DRY theDBName everywhere in this file
     @lessonsDir = "#{__dirname}/../audio/"
     dir = @lessonsDir+newDir
     if fs.statSync(dir).isDirectory()
@@ -22,7 +26,7 @@ module.exports = class CouchLift
         (path.basename(file)[0] isnt "." and path.basename(file).substring(0,4) isnt "Icon" and fs.statSync(file).isFile())
       list.forEach (name) =>
         file = path.join(dir, name)
-        _currentObject = {t: 'spark', _attachments: {}, legacy_name: file, folder: newDir}
+        _currentObject = {t: 'media', _attachments: {}, legacy_name: file, folder: newDir}
         console.log "Processing file at path #{file}"
         processFile file, (_aPath,v) =>
           console.log name
@@ -31,8 +35,8 @@ module.exports = class CouchLift
 
   processDirectory = (aPath, anObject, theDBName) =>
     anObject ?= {}
-    theDBName ?= 'px'
-    _currentObject = Object.merge {t: 'spark', _attachments: {}}, anObject
+    theDBName ?= 'frei'
+    _currentObject = Object.merge {t: 'media', _attachments: {}}, anObject
     console.log "Processing directory at path #{aPath}"
 
     _cb = (_aPath,v) =>
@@ -47,7 +51,7 @@ module.exports = class CouchLift
 
 
   save = (anObject, theDBName) =>
-    theDBName ?= 'px'
+    theDBName ?= 'frei'
     request {method: 'POST', url : "http://localhost:5984/#{theDBName}", json : anObject}, (err, resp, body) ->
       console.error err if err
       console.log body
