@@ -1,6 +1,7 @@
 class @NG extends Batman.App
   @root 'projects#index'
 
+  @resources 'photos'
   @resources 'projects'
 
   @route 'error', "error#index"

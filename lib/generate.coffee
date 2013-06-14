@@ -12,7 +12,7 @@ Batman.helpers.classify = (string) ->
   Batman.helpers.singularize titlelized
 
 pathMake = (aPath) -> "#{__dirname}/../#{aPath}"
-assetsPathMake = (aPath) -> pathMake "app/assets/#{aPath}"
+assetsPathMake = (aPath) -> pathMake "assets/#{aPath}"
 viewsPathMake = (aPath) -> assetsPathMake "views/#{aPath}"
 jsPathMake = (aPath) -> assetsPathMake "js/#{aPath}"
 

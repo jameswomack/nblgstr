@@ -1,4 +1,5 @@
-global.NG = NG ?= {}
+NG = {} if !NG?
+global.NG = NG
 
 path    = require 'path'
 express = require 'express'

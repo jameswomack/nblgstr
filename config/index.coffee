@@ -1,7 +1,8 @@
-global ?= window
-NG = global.NG
-NG.config ?= {}
-NG.env ?= "development"
+NG = {} if !NG?
+global = window if !global? && window?
+global.NG = NG
+NG.config = {} if !NG.config?
+NG.env = "development" if !NG.env?
 
 NG._cs = _cs = ( c, s ) -> if window? then c else s
 
