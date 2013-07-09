@@ -15,7 +15,11 @@
     "mime": "~1.2.6",
     "q": "0.8.x",
     "imagemagick": "https://github.com/rsms/node-imagemagick/tarball/master",
-    "express-uglify": "~0.3.1"
+    "express-uglify": "~0.3.1",
+    "node-terminal": "~0.1.1",
+    "passport": "~0.1.17",
+    "passport-local": "~0.1.6",
+    "connect-redis": "~1.4.5"
   },
   "batman": {
     "appName": "frei",
