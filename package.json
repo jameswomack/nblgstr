@@ -23,7 +23,7 @@
     "supervisor": "0.5.x"
   },
   "batman": {
-    "appName": "frei",
+    "appName": "BB",
     "build": true,
     "buildDir": "./build"
   },
