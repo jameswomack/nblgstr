@@ -1,11 +1,14 @@
 nav
-  h1.title frei
+  h1.title Babes & Brewskies
   - var itemMake = function (o) { return { name: o, route: o.toLowerCase(), controller: o.toLowerCase() }; }
-  - var links = [ itemMake("Stores") ]
-  ul
-    li( data-showif="user_logged_in" )
-      a( href="/logout" ) Logout
-
+  - var links = [ itemMake("Posts") ]
+  ul#sections
     each link in links
       li( class=link.route, data-addclass-active="currentRoute.controller | equals '#{link.controller}'", data-removeclass-active="currentRoute.controller | equals '#{link.controller}' | not" )
         a( data-route="routes.#{link.route}", ontouchstart="", ontouchend="" )= link.name
+        span.keycode
+  ul#user
+    li( data-showif="User.current" )
+      a( data-bind="User.current.email | prepend 'Logout '", href="/logout" )
+    li( data-hideif="User.current" )
+      a( data-bind="Login", href="/_login", data-bind="User.loginText" )

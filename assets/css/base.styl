@@ -29,12 +29,9 @@ base_font_size = 14px
 base_font_family = "BaseTwelveMedium", monospace
 base_font_color = #fff
 
-body, input, textarea
-  font-family: base_font_family
-
 body
-  font-size: base_font_size
   background-color: #000
+  font: base_font_size base_font_family
   font-style: none
   color: base_font_color
   text-align: center
@@ -48,6 +45,9 @@ a:visited
 
 ul
   list-style-type: none
+  margin: 0px auto
+
+ul.rows
   margin: 0px auto 36px auto
   width: 600px
   background #ddd
@@ -71,17 +71,6 @@ li.index
     margin-top 6%
   input[type=checkbox]
     margin-left 10px
-
-#ulContainer #instances li.index
-  *
-    display: inline-table
-    vertical-align: middle
-    height: 28px
-  img
-    max-height: 56px
-    max-width: 56px
-    margin-right: 12px
-
 
 ul#use
   margin-top 72px
@@ -123,29 +112,8 @@ div.inputContainer
     display inline-block
     width 72px
 
-h1 input[name=knowHow]
-  animation-duration: 1s
-  width: 500px
-  -webkit-animation-name: disco
-  -webkit-animation-duration: 2s
-  -webkit-animation-iteration-count: infinite
-
-h1 input[name=knowHow]:focus
-  animation-duration: 0.5s
-  animation-name: grow
-  -webkit-animation-fill-mode: forwards
-
-@keyframes disco {
-  0%   { background: #fff;}
-  25%   { background: #eee; animation-timing-function: ease-in;}
-  50%   { background: #ccc;}
-  75% { background: #eee; animation-timing-function: ease-in;}
-  100% { background: #fff; }
-}
-
-@keyframes grow {
-  100% {width: 520px}
-}
+input[name=knowHow]
+  width: 520px
 
 h1
   text-transform uppercase

@@ -1,5 +1,8 @@
-class Frei.CameraView extends Batman.View
-  constructor: ->
+class BB.CameraView extends Batman.View
+  _key = undefined
+
+  constructor: (options) ->
+    _key = Object.keys(options)[0]
     super arguments...
     @input = $('<input type="file">')
 
@@ -29,7 +32,7 @@ class Frei.CameraView extends Batman.View
     @input.click()
 
   setPicture: (image) ->
-    @set 'instance.picture', image
+    @set "#{_key}.picture", image
 
   showiOSCamera: ->
     window.location.href = 'brilliant://camera'

@@ -1,16 +1,14 @@
-include ../_blocks/_nav
-block index_main
-  h1
-   input( type="text", name="knowHow", placeholder="Search project by name", data-event-keyup="filter" )
-   input( type="button", value="reset", data-event-click="resetSearch"  )
-  p#matchStats
-  ul( data-showif="user_logged_in" )
-   li( class="index new" )
-     span( class="title", data-event-click="goToNew" ) Fill-out New Instance
-  div#container
-    div#ulContainerMask
-    div#ulContainerMaskTop
-    div#ulContainer
-      ul#instances
-        li( data-foreach-instance="list", class="index" )
-          block list-item
+!= partial( "../_blocks/_nav" )
+h1
+ input( type="text", name="knowHow", placeholder="Search post by name", data-event-keyup="filter" )
+ input( type="button", value="reset", data-event-click="resetSearch"  )
+p#matchStats
+ul.rows( data-showif="User.current" )
+ li( class="index new" )
+   span( class="title", data-event-click="goToNew", data-bind="defaultModelNameSingular | prepend 'Fill out new '" )
+div#container
+  div#ulContainerMask
+  div#ulContainerMaskTop
+  div#ulContainer
+    ul#instances.rows(data-showif="list.length")
+      block list-item

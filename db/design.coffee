@@ -27,7 +27,10 @@ design = {
   , lists: {}
   , shows: {}
 }
-
+design.views.post_search = {
+  map: (d) ->
+    emit d.title, d._id if d.t is 'post'
+}
 design.views.store_search = {
   map: (d) ->
     emit d.title, d._id if d.t is 'store'

@@ -1,0 +1,15 @@
+extends ../_blocks/_show
+block properties
+  #post( data-context="post")
+    p#post Currently viewing post:
+    h1(data-bind="title")
+    a(data-route="post | routeToAction 'edit'", data-showif="User.current") Edit
+    div#details
+      div#body_container
+        div(data-bind="body")
+      div#other_container
+        div.map
+          div#map
+        div#picture
+          a(data-bind-href="post.picture")
+            img(data-bind-src="post.picture")

@@ -19,7 +19,7 @@ data =
   test:
     name: "test"
   development:
-    name: "frei"
+    name: "bb"
 
 data.base.url_auth_string = authority.assign(data.base)
 

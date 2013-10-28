@@ -1,5 +1,6 @@
-include ../_blocks/_nav
+!= partial( "../_blocks/_nav" )
 block new
-  h1(data-bind="defaultModelName | prepend 'Create a '", data-event-doubleclick="autofillAll")
-  form(data-formfor-instance='instance', data-event-submit="create")
+  h1(data-bind="defaultModelName | prepend 'Create a '")
+  form#batmanModel(data-bind-data-formfor-instance='defaultModelNameSingular', data-event-submit="create")
+    div
     block properties

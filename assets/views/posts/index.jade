@@ -1,0 +1,15 @@
+extends ../_blocks/_index
+block list-item
+  li( data-foreach-post='list', class="index" )
+    div(class="image_mask")
+      img(data-bind-src="post.picture_thumb")
+    div(class="main_metadata")
+      div(data-bind="post.title", class="title")
+      div(data-bind="post.location_name | prepend 'Location: '", class="location_name")
+      div(data-bind="post.user.email | prepend 'Posted by: '", class="user_email")
+      div(data-bind="post.created", class="created")
+    div(class="actions")
+      div(class="view")
+        a(data-route="post") View
+      div(class="edit")  
+        a(data-route="post | routeToAction 'edit'", data-showif="User.current") Edit

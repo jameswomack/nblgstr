@@ -1,5 +1,6 @@
-include ../_blocks/_nav
+!= partial( "../_blocks/_nav" )
 block edit
-  h1(data-bind="defaultModelName | prepend 'Edit a '", data-event-doubleclick="edit_to_show")
-  form(data-formfor-instance='instance', data-event-submit="update")
+  h1(data-bind="defaultModelName | prepend 'Edit a '")
+  form#batmanModel(data-bind-data-formfor-instance='defaultModelNameSingular', data-event-submit="update")
+    div
     block properties

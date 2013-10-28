@@ -1,2 +1,2 @@
-class Frei.ErrorController extends Frei.Controller
+class BB.ErrorController extends BB.Controller
   index: ->

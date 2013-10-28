@@ -1,0 +1,18 @@
+div.text_control
+  label(for='title') 
+    span Title
+    input(type='text', data-bind='post.title', name='title', placeholder="Name of your post")
+div.text_control
+  label(for='body') 
+    span Body
+    textarea(data-bind='post.body', name='body', placeholder="Your review")
+div.text_control
+  label(for='location_name') 
+    span Location Name
+    textarea(data-bind='post.location_name', name='location_name', placeholder="The restaurant, bar or brewery")
+div.post_picture
+  img(data-bind-src="cameraView.post.picture", data-showif="cameraView.post.picture")
+  img(src="../../img/silhouette.png", data-hideif="cameraView.post.picture")
+  != partial('../_blocks/_camera')
+
+input(value='Save Changes', type='submit')

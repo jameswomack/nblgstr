@@ -1,4 +1,4 @@
-class Frei.User extends Frei.Model
+class BB.User extends BB.Model
   @encode 'name', 'password'
 
   @accessor 'email',
@@ -9,4 +9,16 @@ class Frei.User extends Frei.Model
 
   @attachment 'picture', {thumb: "80x80>", medium: "260x260>", large: "640x640>"}
 
-  @parentOf 'stores'
+  @parentOf 'posts'
+  
+  @classAccessor 'loginText', ->
+    'Login'
+
+  @classAccessor 'current', ->
+    user_id = $.cookie().user_id 
+    user_id = null if user_id is 'undefined'
+    if user_id
+      @find $.cookie().user_id, (err, user) => 
+        user
+    else
+      false

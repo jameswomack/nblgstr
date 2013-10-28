@@ -1,9 +1,19 @@
-class Frei.Model extends Batman.Model
-  @persist Frei.CouchStorage
+class BB.Model extends Batman.Model
+  @persist BB.CouchStorage
   @primaryKey: "_id"
-  @encode "_rev",'_attachments','created_time','updated_time'
+  @encode "_rev",'_attachments','created','modified'
+  
+  @encode 'created',
+    decode: (value, key, incomingJSON, outgoingObject, record) ->
+      _value = new Date(value)
+      _value.format()
+      
+  @encode 'modified',
+    decode: (value, key, incomingJSON, outgoingObject, record) ->
+      _value = new Date(value)
+      _value.format()
 
-  @classAccessor 'resourceName', -> @name
+  @classAccessor 'resourceName', -> @name    
 
   @::valid = ->
     keys = Array::slice.call arguments
@@ -26,7 +36,7 @@ class Frei.Model extends Batman.Model
           do (k, v)->
             [ attr, name, style ] = k.split '/'
             style = style.replace /\..*/, ''
-            a.attr[name] = {} if typeof a.attr[name] is 'undefined'
+            a.attr[name] ?= {}
             a.attr[name][style] = v
             a.attr[name][style].filename = k
             _refer.accessor name,
@@ -38,15 +48,19 @@ class Frei.Model extends Batman.Model
 
   @attachment: (attr_name, styles) ->
     @encode '_attachment_styles'
-    @__attachment_styles = {} if typeof @__attachment_styles is 'undefined'
-    a = @__attachment_styles
+    a = @__attachment_styles ?= {}
     a[attr_name] = styles
 
     @accessor attr_name,
       get: ->
-        if pic = @get('_attachments')?.attr?[attr_name]?.original
+        _attachments = @get('_attachments')
+        namedAttachmentObject = _attachments.attr[attr_name]
+        originalAttachment = namedAttachmentObject.original
+        if pic = originalAttachment
           if pic.filename
-            "/img/#{@get 'id'}/#{pic.filename}.#{pic.digest}.#{MimeTypes.ext pic.content_type}"
+            id = @get('id')
+            console.log id, @get('_id')
+            "/img/#{id}/#{pic.filename}.#{pic.digest}.#{MimeTypes.ext pic.content_type}"
           else
             @["_#{attr_name}"]
 
@@ -62,13 +76,15 @@ class Frei.Model extends Batman.Model
             if pic = @get('_attachments')?.attr?[attr_name]?[style]
               "/img/#{@get 'id'}/#{pic.filename}.#{pic.digest}.#{MimeTypes.ext pic.content_type}"
 
+    
+
     @encode '_attachments',
       decode: (value, key, incomingJSON, outgoingObject, record) ->
         a = attr:{}
         for k, v of incomingJSON._attachments when k.indexOf 'attr/' is 0
           [ attr, name, style ] = k.split '/'
           style = style.replace /\..*/, ''
-          a.attr[name] = {} if typeof a.attr[name] is 'undefined'
+          a.attr[name] ?= {}
           a.attr[name][style] = v
           a.attr[name][style].filename = k
         a
@@ -80,27 +96,17 @@ class Frei.Model extends Batman.Model
             a["attr/#{k}/#{kk}"] = vv
         a
 
-
-  @encode : ->
-    @__defineGetter__ "type", ->
-      @.toString().split('function ')[1].split('() {')[0].toLowerCase()
-    for argIndex of arguments
-      key = arguments[argIndex]
-      if Batman.typeOf key is "String"
-        Batman.Model._keys = {} if typeof Batman.Model._keys is 'undefined'
-        Batman.Model._keys[@type] = [] if typeof Batman.Model._keys[@type] is 'undefined'
-        Batman.Model._keys[@type].push key unless Batman.contains Batman.Model._keys[@type], key
-    super
-
   @allKeys : ->
-    Batman.Model._keys[@type]
+    _all = Object.keys(@::_batman.encoders._storage).map (k) ->
+      k.substring(1)
+    _all.exclude(Object.keys(BB.Model::_batman.encoders._storage)...)
 
   @all: (args..., cb) ->
     set = new Batman.Set
     @load args..., (err,res) =>
       if !err
         set.add res...
-      cb err, set
+      cb err, set if cb?
     set
 
   @childOf : (relation)->
@@ -127,16 +133,16 @@ class Frei.Model extends Batman.Model
         resourceName = Batman.helpers.pluralize resourceName unless v?.get?(resourceName)?
         if singular
           if Batman.typeOf(v) is 'Set'
-            throw new Frei.DevelopmentError "Singular relations require a Batman.Object, Batman.Set given."
+            throw new BB.DevelopmentError "Singular relations require a Batman.Object, Batman.Set given."
           else if v.get?(singularResourceName) and v.get?(singularResourceName).length > 0
-            throw new Frei.DevelopmentError "Parent model should not have more than 1 children associated."
+            throw new BB.DevelopmentError "Parent model should not have more than 1 children associated."
           parent_data = if (Batman.typeOf(v) == 'String') then {_id: v} else {_id: v.get('id')}
         else
           parent_data = v
         v.get(resourceName).add @ if v.get?(resourceName)
         @set field_name, parent_data
       get: (k) ->
-        parentObj = Frei[ Batman.helpers.classify(objectType) ]
+        parentObj = BB[ Batman.helpers.classify(objectType) ]
         if singular
           return null unless @get(field_name)?
           parentObj.find @get(field_name)._id, (err, result) -> result
@@ -162,16 +168,16 @@ class Frei.Model extends Batman.Model
 
     @accessor relation,
       set : (k, v)->
-        throw new Frei.DevelopmentError "need to save first" if !@get('id')
+        throw new BB.DevelopmentError "need to save first" if !@get('id')
         if singular
           related = @get(relation)
           related.on 'change', (r)->
-            throw new Frei.DevelopmentError "Model should not have more than 1 children associated." if r and r.length > 0
+            throw new BB.DevelopmentError "Model should not have more than 1 children associated." if r and r.length > 0
             v.set resourceName, @
             v.save()
       get : ->
-        throw new Frei.DevelopmentError "need to save first" if !@get('id')
-        Frei[ Batman.helpers.classify(objectType) ].all view: 'children', key: [ objectType, @get('id') ],  (err, results) ->
+        throw new BB.DevelopmentError "need to save first" if !@get('id')
+        BB[ Batman.helpers.classify(objectType) ].all view: 'children', key: [ objectType, @get('id') ],  (err, results) ->
           results
       unset : ->
         @unset field_name

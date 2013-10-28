@@ -1,10 +1,8 @@
-class Frei.DevelopmentError extends Error
-
+class BB.DevelopmentError extends Error
   constructor : (@message) ->
     @name = "DevelopmentError"
 
 
-class Frei.Sanity
-  @check : (objectToTest, aType, aMessage, testAsBoolean) ->
-    objectToTest = new Boolean objectToTest if testAsBoolean
-    throw new TypeError aMessage unless objectToTest instanceof aType
+class BB.Sanity
+  @check : (objectToTest, aType) ->
+    throw new TypeError "object #{objectToTest} is not of type #{aType}" unless objectToTest["is#{aType.capitalize()}"]

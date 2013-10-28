@@ -1,10 +1,10 @@
-class Frei.CouchStorage extends Batman.RestStorage
+class BB.CouchStorage extends Batman.RestStorage
   serializeAsForm: false
 
-  _defaultCollectionUrl: (_) -> Frei.config.db.name
+  _defaultCollectionUrl: (_) -> BB.config.db.name
   urlForCollection: (model, env) ->
     view = env.options.data.view
-    view_id = env.options.data.view_id ? Frei.config.db.view_id
+    view_id = env.options.data.view_id ? BB.config.db.view_id
     env.options.data.key = JSON.stringify env.options.data.key if env.options.data.key
     if (not view?) and (modelType = Batman.helpers.singularize(@storageKey(model.prototype)))
       view = "type"
@@ -12,10 +12,7 @@ class Frei.CouchStorage extends Batman.RestStorage
     [ "#{window.location.protocol}//#{window.location.host}", @_defaultCollectionUrl(), '_design', view_id, '_view', view].join('/')
 
   @::before 'destroy', @skipIfError (env, next) ->
-    subject = env.subject
-    data = subject.toJSON()
-    data.rev = subject.get "_rev"
-    env.options.data = data
+    env.options.data.rev = env.subject.get "_rev"
     next()
 
   @::before 'readAll', @skipIfError (env, next) ->
@@ -24,6 +21,7 @@ class Frei.CouchStorage extends Batman.RestStorage
 
   @::before 'create', 'update', @skipIfError (env, next) ->
     subject = env.subject
+    subject.set 'modified', new Date
     data = subject.toJSON()
     if namespace = @recordJsonNamespace(subject)
       data.t = namespace
@@ -38,25 +36,15 @@ class Frei.CouchStorage extends Batman.RestStorage
 
     env.options.data = data
 
-    _data = JSON.parse data
-
     if env.subject.get('id')?
-      _data.updated_time = new Date().toJSON()
-      @readyToSave env, _data, next
+      next()
     else
       $.get '/uuidURL', (o) =>
+        _data = JSON.parse data
         _data._id = o.uuid
-        _data.created_time = new Date().toJSON()
-        if !_data.p_user?._id
-          _data.p_user = {_id: $.cookie('user_id')}
-          console.debug _data.p_user
-        else if _data.p_user._id != $.cookie('user_id')
-          throw new Frei.DevelopmentError "Object not belonging to current user was edited"
-        @readyToSave env, _data, next
-
-  readyToSave: (env, data, next) ->
-    env.options.data = JSON.stringify(data)
-    next()
+        _data.created = _data.modified = new Date
+        env.options.data = JSON.stringify(_data)
+        next()
 
   # TODO - update is only needed here because of https://github.com/Shopify/batman/pull/447
   @::after 'create', 'update', @skipIfError (env, next) ->

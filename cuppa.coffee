@@ -40,6 +40,8 @@ app.configure ->
 
   app.use "/#{a}", express.static "#{__assets}/#{a}" for a in fs.readdirSync __assets
 
+  app.use(express.logger())
+
   app.use expressUglify.middleware
     src: __public,
     logLevel: 'info',
@@ -122,13 +124,14 @@ app.get /^\/img\/([^/]+)\/([^.]+)/, (req, res) ->
   request("#{Frei.config.db.url}/#{id}/#{path}").pipe res
 
 app.post '/upload', ensureAuthenticated, (req, res) ->
-  if req.files.picture isnt undefined
-    require("#{__lib}/fotoshop").fit req.files.picture.path, 1024, 768, (anError, theImage, theMIME) =>
-      _base64data = (new Buffer theImage, 'binary').toString('base64') unless anError
-      res.json content_type: theMIME, data: _base64data, error: anError
+  picture = req.files.picture
+  if picture isnt undefined
+    require("#{__lib}/fotoshop").fit picture.path, 1024, 768, (error, imageData, content_type) =>
+      data = (new Buffer imageData, 'binary').toString('base64') unless error
+      res.json content_type: content_type, data: data , error: error
   else
-    err = new Error "req.files.picture is undefined"
-    res.json error: err
+    error = new Error "req.files.picture is undefined"
+    res.json error: error
 
 app.get '/*', (req, res) ->
   Frei.back_url = req.cookies.back_url
@@ -138,7 +141,7 @@ app.get '/*', (req, res) ->
       node_env: Frei.env
       stylesheet: asset_helper.css("screen")
       scripts: asset_helper.js("app")
-      title: "Mobile & Web Software Development | Noble Gesture"
+      title: "Hot Babes and Cool Cervezas | Babes & Brewskies"
       status: 200
 
 if module.parent
