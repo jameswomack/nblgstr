@@ -1,6 +1,6 @@
 {
   "name": "frei",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "express": "~2.5",
     "stylus": "~0.27",
